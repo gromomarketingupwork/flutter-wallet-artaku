@@ -6,8 +6,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class ANAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color backgroundColor = ANColor.primary;
   final AppBar appBar;
+  final Widget wallet;
 
-  ANAppBar({Key key, @required this.appBar}) :super(key: key);
+  ANAppBar({Key key, @required this.appBar, this.wallet}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +27,13 @@ class ANAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         Image.asset(ANAssets.appLogo),
         SizedBox(
-          width: MediaQuery.of(context).size.width*0.3,
-        )
+          width: wallet == null
+              ? MediaQuery.of(context).size.width * 0.3
+              : MediaQuery.of(context).size.width * 0.21,
+        ),
+        wallet != null
+            ? Padding(padding: EdgeInsets.only(right: 12), child: wallet)
+            : SizedBox()
       ],
     );
   }
@@ -35,5 +41,4 @@ class ANAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   // TODO: implement preferredSize
   Size get preferredSize => new Size.fromHeight(60);
-
 }

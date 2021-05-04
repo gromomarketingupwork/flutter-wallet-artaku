@@ -1,7 +1,11 @@
 import 'package:etherwallet/qrcode_reader_page.dart';
+import 'package:etherwallet/screens/backup_wallet_page.dart';
+import 'package:etherwallet/screens/home_page.dart';
 import 'package:etherwallet/screens/pin_enter_page.dart';
 import 'package:etherwallet/screens/profile_setup.dart';
 import 'package:etherwallet/screens/setup_restore.dart';
+import 'package:etherwallet/screens/wallet_page.dart';
+import 'package:etherwallet/screens/your_wallet_page.dart';
 import 'package:etherwallet/service/configuration_service.dart';
 import 'package:etherwallet/wallet_create_page.dart';
 import 'package:etherwallet/wallet_import_page.dart';
@@ -47,6 +51,22 @@ Map<String, WidgetBuilder> getRoutes(context) {
     '/pin-enter': (BuildContext context) =>
         WalletSetupProvider(builder: (context, store) {
           return PinEnterPage();
+        }),
+    '/home': (BuildContext context) =>
+        WalletSetupProvider(builder: (context, store) {
+          return HomePage();
+        }),
+    '/your-wallet': (BuildContext context) =>
+        WalletSetupProvider(builder: (context, store) {
+          return YourWalletPage();
+        }),
+    '/wallet': (BuildContext context) =>
+        WalletSetupProvider(builder: (context, store) {
+          return WalletPage();
+        }),
+    '/backup-wallet': (BuildContext context) =>
+        WalletSetupProvider(builder: (context, store) {
+          return BackupWalletPage();
         }),
     '/import': (BuildContext context) => WalletSetupProvider(
           builder: (context, store) {

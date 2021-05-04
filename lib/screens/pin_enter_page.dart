@@ -90,7 +90,7 @@ class _PinEnterPageState extends State<PinEnterPage> {
         : print('User is not authenticated.');
 
     if (isAuthenticated) {
-      //TODO do some action here
+      Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
     }
   }
 
@@ -204,6 +204,8 @@ class _PinEnterPageState extends State<PinEnterPage> {
                           children: [
                             GridView.count(
                               crossAxisCount: 3,
+                              crossAxisSpacing: MediaQuery.of(context).size.width*0.2,
+                              mainAxisSpacing: MediaQuery.of(context).size.width*0.1,
                               shrinkWrap: true,
                               children: [
                                 ...actionList.map(
