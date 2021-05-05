@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:etherwallet/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,6 +24,8 @@ class ANTextFormField extends StatelessWidget {
   final TextInputAction textInputAction;
   final Widget suffixIcon;
   final bool obscureText;
+  final int maxLines;
+  final double borderRadius;
 
   const ANTextFormField({
     this.onChange,
@@ -30,6 +34,7 @@ class ANTextFormField extends StatelessWidget {
     this.fillColor,
     this.placeholder = "",
     this.hintText = "",
+    this.borderRadius = 12.0,
     this.readOnly = false,
     this.obscureText = false,
     this.prefixText,
@@ -38,6 +43,7 @@ class ANTextFormField extends StatelessWidget {
     this.suffixIcon,
     this.inputFormatters,
     this.width,
+    this.maxLines = 1,
     this.textCapitalization = TextCapitalization.none,
     this.textInputAction = TextInputAction.next,
     this.attribute,
@@ -66,6 +72,7 @@ class ANTextFormField extends StatelessWidget {
                     textCapitalization: textCapitalization,
                     textInputAction: textInputAction,
                     cursorHeight: 20,
+                    maxLines: maxLines,
                     // textAlign: TextAlign.center,
                     readOnly: readOnly,
                     decoration: InputDecoration(
@@ -82,12 +89,12 @@ class ANTextFormField extends StatelessWidget {
                           TextStyle(color: Colors.black.withOpacity(0.6), fontStyle: FontStyle.italic, fontSize: 20),
                       labelStyle: TextStyle(height: 1),
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                        borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
                         borderSide: BorderSide(
                             width: 1, color: ANColor().textSecondary),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                        borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
                         borderSide: BorderSide(
                             width: 1, color: ANColor().textSecondary),
                       ),

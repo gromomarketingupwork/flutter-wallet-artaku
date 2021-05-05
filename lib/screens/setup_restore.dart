@@ -46,7 +46,9 @@ class _WalletSetupRestorePageState extends State<WalletSetupRestorePage> {
                 width: 250,
                 textColor: ANColor.textPrimary,
                 buttonColor: ANColor.white,
-                onClick: () {},
+                onClick: () {
+                  Navigator.of(context).pushNamed('/restore-wallet');
+                },
                 borderRadius: 25,
                 label: "Restore Wallet",
               )

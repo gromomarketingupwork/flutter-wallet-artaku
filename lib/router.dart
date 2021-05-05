@@ -2,7 +2,9 @@ import 'package:etherwallet/qrcode_reader_page.dart';
 import 'package:etherwallet/screens/backup_wallet_page.dart';
 import 'package:etherwallet/screens/home_page.dart';
 import 'package:etherwallet/screens/pin_enter_page.dart';
+import 'package:etherwallet/screens/pin_set_page.dart';
 import 'package:etherwallet/screens/profile_setup.dart';
+import 'package:etherwallet/screens/restore_wallet_page.dart';
 import 'package:etherwallet/screens/setup_restore.dart';
 import 'package:etherwallet/screens/wallet_page.dart';
 import 'package:etherwallet/screens/your_wallet_page.dart';
@@ -67,6 +69,14 @@ Map<String, WidgetBuilder> getRoutes(context) {
     '/backup-wallet': (BuildContext context) =>
         WalletSetupProvider(builder: (context, store) {
           return BackupWalletPage();
+        }),
+    '/restore-wallet': (BuildContext context) =>
+        WalletSetupProvider(builder: (context, store) {
+          return RestoreWalletPage();
+        }),
+    '/pin-set': (BuildContext context) =>
+        WalletSetupProvider(builder: (context, store) {
+          return PinSetPage();
         }),
     '/import': (BuildContext context) => WalletSetupProvider(
           builder: (context, store) {
