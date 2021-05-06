@@ -39,6 +39,5 @@ class WalletProvider extends ContextProviderWidget<WalletHandler> {
 
 WalletHandler useWallet(BuildContext context) {
   var handler = Provider.of<WalletHandler>(context);
-
   return handler;
 }

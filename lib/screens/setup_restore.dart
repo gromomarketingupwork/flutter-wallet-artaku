@@ -3,13 +3,9 @@ import 'package:etherwallet/constants/an_assets.dart';
 import 'package:etherwallet/constants/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
-class WalletSetupRestorePage extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => _WalletSetupRestorePageState();
-}
-
-class _WalletSetupRestorePageState extends State<WalletSetupRestorePage> {
+class WalletSetupRestorePage extends HookWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(

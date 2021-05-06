@@ -1,18 +1,37 @@
 import 'package:etherwallet/components/appbar/an_appbar.dart';
 import 'package:etherwallet/constants/colors.dart';
 import 'package:etherwallet/constants/syles.dart';
+import 'package:etherwallet/context/setup/wallet_setup_provider.dart';
+import 'package:etherwallet/context/wallet/wallet_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-class YourWalletPage extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => _YourWalletPageState();
-}
 
-class _YourWalletPageState extends State<YourWalletPage> {
+checkRoute(String route, BuildContext context) async {
+  if(route=='wallet-setup-incomplete'){
+    var store = useWalletSetup(context);
+    await store.confirmMnemonic(store.state.mnemonic);
+    Navigator.of(context).pushNamed('/your-wallet');
+  }
+}
+class YourWalletPage extends HookWidget{
+
+  final String route;
+
+  YourWalletPage(this.route);
+
   @override
   Widget build(BuildContext context) {
+    checkRoute(route, context);
+    var store = useWallet(context);
+    useEffect(() {
+      store.initialise();
+      return null;
+    }, []);
+
+
     return Scaffold(
       backgroundColor: ANColor.primary,
       appBar: ANAppBar(
@@ -34,7 +53,7 @@ class _YourWalletPageState extends State<YourWalletPage> {
               height: 20,
             ),
             QrImage(
-              data: "0x3453453455acdca3424cac35343453aca",
+              data: store.state.address,
               version: QrVersions.auto,
               size: 200,
               backgroundColor: ANColor.white,
@@ -42,10 +61,13 @@ class _YourWalletPageState extends State<YourWalletPage> {
             SizedBox(
               height: 20,
             ),
-            Text(
-              "0x3453453455acdca3424cac35343453aca",
-              style: header3.copyWith(
-                  color: ANColor.backgroundText, fontWeight: FontWeight.w300),
+            Padding(
+              padding: EdgeInsets.all(10),
+              child: Text(
+                store.state.address,
+                style: header4.copyWith(
+                    color: ANColor.backgroundText, fontWeight: FontWeight.w300),
+              ),
             ),
             SizedBox(
               height: 50,
@@ -60,4 +82,7 @@ class _YourWalletPageState extends State<YourWalletPage> {
       ),
     );
   }
+
 }
+
+

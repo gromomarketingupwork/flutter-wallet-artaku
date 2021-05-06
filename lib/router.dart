@@ -58,10 +58,23 @@ Map<String, WidgetBuilder> getRoutes(context) {
         WalletSetupProvider(builder: (context, store) {
           return HomePage();
         }),
-    '/your-wallet': (BuildContext context) =>
-        WalletSetupProvider(builder: (context, store) {
-          return YourWalletPage();
-        }),
+    '/your-wallet': (BuildContext context) {
+      var configurationService = Provider.of<ConfigurationService>(context);
+      if(configurationService.didSetupWallet()){
+        return WalletProvider(builder: (context, store){
+          return YourWalletPage('wallet-setup-complete');
+        });
+      }else{
+        return WalletSetupProvider(builder: (context, store){
+          useEffect(() {
+            store.generateMnemonic();
+            store.confirmMnemonic(store.state.mnemonic);
+            return null;
+          }, []);
+          return YourWalletPage('wallet-setup-incomplete');
+        });
+      }
+    },
     '/wallet': (BuildContext context) =>
         WalletSetupProvider(builder: (context, store) {
           return WalletPage();

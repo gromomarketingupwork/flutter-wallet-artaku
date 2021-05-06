@@ -1,3 +1,4 @@
+import 'package:etherwallet/context/setup/wallet_setup_state.dart';
 import 'package:etherwallet/model/wallet.dart';
 import 'package:etherwallet/service/address_service.dart';
 import 'package:etherwallet/service/configuration_service.dart';
