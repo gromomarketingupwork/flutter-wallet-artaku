@@ -60,20 +60,18 @@ Map<String, WidgetBuilder> getRoutes(context) {
         }),
     '/your-wallet': (BuildContext context) {
       var configurationService = Provider.of<ConfigurationService>(context);
-      if(configurationService.didSetupWallet()){
-        return WalletProvider(builder: (context, store){
-          return YourWalletPage('wallet-setup-complete');
-        });
-      }else{
-        return WalletSetupProvider(builder: (context, store){
+      if (!configurationService.didSetupWallet()) {
+        return WalletSetupProvider(builder: (context, store) {
           useEffect(() {
             store.generateMnemonic();
-            store.confirmMnemonic(store.state.mnemonic);
             return null;
           }, []);
           return YourWalletPage('wallet-setup-incomplete');
         });
       }
+      return WalletProvider(builder: (context, store) {
+        return YourWalletPage('wallet-setup-complete');
+      });
     },
     '/wallet': (BuildContext context) =>
         WalletSetupProvider(builder: (context, store) {

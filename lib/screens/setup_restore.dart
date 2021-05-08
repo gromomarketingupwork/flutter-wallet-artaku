@@ -29,7 +29,7 @@ class WalletSetupRestorePage extends HookWidget{
                 textColor: ANColor.textPrimary,
                 buttonColor: ANColor.white,
                 onClick: () {
-                  Navigator.of(context).pushNamed("/profile-setup");
+                  Navigator.of(context).pushNamed("/your-wallet");
                 },
                 borderRadius: 25,
                 label: "Setup New Account",

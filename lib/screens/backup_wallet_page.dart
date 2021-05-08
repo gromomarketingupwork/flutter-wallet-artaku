@@ -2,6 +2,7 @@ import 'package:etherwallet/components/appbar/an_appbar.dart';
 import 'package:etherwallet/components/button/an_button.dart';
 import 'package:etherwallet/constants/colors.dart';
 import 'package:etherwallet/constants/syles.dart';
+import 'package:etherwallet/context/setup/wallet_setup_provider.dart';
 import 'package:flutter/material.dart';
 
 class BackupWalletPage extends StatefulWidget {
@@ -12,6 +13,8 @@ class BackupWalletPage extends StatefulWidget {
 class _BackupWalletPageState extends State<BackupWalletPage> {
   @override
   Widget build(BuildContext context) {
+    dynamic args = ModalRoute.of(context).settings.arguments;
+    var store = useWalletSetup(context);
     return Scaffold(
       backgroundColor: ANColor.primary,
       appBar: ANAppBar(
@@ -39,7 +42,7 @@ class _BackupWalletPageState extends State<BackupWalletPage> {
                   color: ANColor.white,
                   borderRadius: BorderRadius.all(Radius.circular(10))),
               child: Text(
-                "word01 word02 word03 word04 word05 word06 word07 word08 word09 word10 word11 word12",
+                args['mnemonic']!=null?args['mnemonic']: "",
                 style: header2.copyWith(fontStyle: FontStyle.italic),
               ),
             ),
