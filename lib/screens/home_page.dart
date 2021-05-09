@@ -2,17 +2,18 @@ import 'package:etherwallet/components/appbar/an_appbar.dart';
 import 'package:etherwallet/constants/an_assets.dart';
 import 'package:etherwallet/constants/colors.dart';
 import 'package:etherwallet/constants/syles.dart';
+import 'package:etherwallet/context/wallet/wallet_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class HomePage extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => _HomePageScreenState();
-}
+class HomePage extends HookWidget {
 
-class _HomePageScreenState extends State<HomePage> {
+
   @override
   Widget build(BuildContext context) {
+    var store = useWallet(context);
+
     return Scaffold(
       backgroundColor: ANColor.primary,
       appBar: ANAppBar(

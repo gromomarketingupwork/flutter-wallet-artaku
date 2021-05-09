@@ -3,7 +3,9 @@ import 'package:etherwallet/components/button/an_button.dart';
 import 'package:etherwallet/constants/colors.dart';
 import 'package:etherwallet/constants/syles.dart';
 import 'package:etherwallet/context/setup/wallet_setup_provider.dart';
+import 'package:etherwallet/service/configuration_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class BackupWalletPage extends StatefulWidget {
   @override
@@ -61,10 +63,15 @@ class _BackupWalletPageState extends State<BackupWalletPage> {
             ANButton(
               height: 50,
               width: 250,
-              label: "Print Restore Phrase",
+              label: "Continue",
               buttonColor: ANColor.white,
               borderRadius: 25,
-              onClick: (){},
+              onClick: (){
+                var configurationService = Provider.of<ConfigurationService>(context, listen: false);
+                if(configurationService.getEmail()==null || configurationService.getEmail().isEmpty){
+                  Navigator.of(context).pushNamed('/profile-setup');
+                }
+              },
             ),
             SizedBox(
               height: 20,

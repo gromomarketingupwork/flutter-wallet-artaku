@@ -27,7 +27,7 @@ class MainApp extends StatelessWidget {
         providers: stores,
         child: new MaterialApp(
           title: 'Flutter App',
-          initialRoute: '/setup-restore',
+          initialRoute: '/',
           routes: getRoutes(context),
           navigatorObservers: [
             FirebaseAnalyticsObserver(analytics: analytics),

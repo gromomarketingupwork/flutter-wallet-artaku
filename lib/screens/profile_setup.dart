@@ -4,15 +4,16 @@ import 'package:etherwallet/components/form/an_text_field.dart';
 import 'package:etherwallet/constants/an_assets.dart';
 import 'package:etherwallet/constants/colors.dart';
 import 'package:etherwallet/constants/syles.dart';
+import 'package:etherwallet/service/configuration_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:provider/provider.dart';
 
 final formKey = GlobalKey<FormBuilderState>();
 var formData = {};
-class WalletProfileSetupPage extends HookWidget{
 
-  WalletProfileSetupPage();
+class WalletProfileSetupPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,43 +39,53 @@ class WalletProfileSetupPage extends HookWidget{
                     height: 250,
                     width: 250,
                   ),
-                  ANTextFormField(
-                    attribute: 'username',
-                    hintText: "Username",
-                    width: 250,
-                    validator: FormBuilderValidators.compose(
-                      [
-                        FormBuilderValidators.required(context,
-                            errorText: "username is required"),
+                  FormBuilder(
+                    key: formKey,
+                    child: Column(
+                      children: [
+                        ANTextFormField(
+                          attribute: 'username',
+                          hintText: "Username",
+                          width: 250,
+                          validator: FormBuilderValidators.compose(
+                            [
+                              FormBuilderValidators.required(context,
+                                  errorText: "username is required"),
+                            ],
+                          ),
+                          initialValue: formData['username'],
+                          onChange: (v) {
+                            useEffect(() {
+                              formData = {...formData, 'username': v};
+                              return null;
+                            });
+                          },
+                        ),
+                        SizedBox(
+                          height: 25,
+                        ),
+                        ANTextFormField(
+                          attribute: 'email',
+                          hintText: "Email",
+                          width: 250,
+                          validator: FormBuilderValidators.compose([
+                            FormBuilderValidators.required(context,
+                                errorText: "Email is required"),
+                            // FormBuilderValidators.email(context, errorText: 'Email pattern not matched')
+                          ]),
+                          initialValue: formData['email'],
+                          onChange: (v) {
+                            useEffect(() {
+                              formData = {...formData, 'email': v};
+                              return null;
+                            });
+                          },
+                        ),
+                        SizedBox(
+                          height: 50,
+                        ),
                       ],
                     ),
-                    initialValue: formData['username'],
-                    onChange: (v) {
-                      // this.setState(() {
-                      //   formData = {...formData, 'username': v};
-                      // });
-                    },
-                  ),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  ANTextFormField(
-                    attribute: 'email',
-                    hintText: "Email",
-                    width: 250,
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(context,
-                          errorText: "Email is required"),
-                    ]),
-                    initialValue: formData['email'],
-                    onChange: (v) {
-                      // this.setState(() {
-                      //   formData = {...formData, 'email': v};
-                      // });
-                    },
-                  ),
-                  SizedBox(
-                    height: 50,
                   ),
                   ANButton(
                     height: 50,
@@ -82,8 +93,14 @@ class WalletProfileSetupPage extends HookWidget{
                     textColor: ANColor.textPrimary,
                     buttonColor: ANColor.white,
                     onClick: () {
-                      // Navigator.of(context).pushNamed("/pin-enter");
-                      Navigator.of(context).pushNamed("/your-wallet");
+                      if (formKey.currentState.saveAndValidate()) {
+                        var configurationService =
+                            Provider.of<ConfigurationService>(context,
+                                listen: false);
+                        configurationService.setEmail(formData['email']);
+                        configurationService.setUsername(formData['username']);
+                        Navigator.of(context).pushNamed('/pin-set');
+                      }
                     },
                     borderRadius: 25,
                     label: "Continue",

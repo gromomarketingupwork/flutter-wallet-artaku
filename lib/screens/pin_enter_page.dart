@@ -1,6 +1,7 @@
 import 'package:etherwallet/components/appbar/an_appbar.dart';
 import 'package:etherwallet/constants/colors.dart';
 import 'package:etherwallet/constants/syles.dart';
+import 'package:etherwallet/service/configuration_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
@@ -8,6 +9,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:provider/provider.dart';
 
 List<String> actionList = [
   "1",
@@ -204,8 +206,10 @@ class _PinEnterPageState extends State<PinEnterPage> {
                           children: [
                             GridView.count(
                               crossAxisCount: 3,
-                              crossAxisSpacing: MediaQuery.of(context).size.width*0.2,
-                              mainAxisSpacing: MediaQuery.of(context).size.width*0.1,
+                              crossAxisSpacing:
+                                  MediaQuery.of(context).size.width * 0.2,
+                              mainAxisSpacing:
+                                  MediaQuery.of(context).size.width * 0.1,
                               shrinkWrap: true,
                               children: [
                                 ...actionList.map(
@@ -214,7 +218,7 @@ class _PinEnterPageState extends State<PinEnterPage> {
                                       alignment: Alignment.center,
                                       child: GestureDetector(
                                         onTap: () {
-                                          controller.performAction(e);
+                                          controller.performAction(e, context);
                                         },
                                         child: Container(
                                           height: 60,
@@ -241,8 +245,8 @@ class _PinEnterPageState extends State<PinEnterPage> {
                                 color: ANColor.white,
                                 size: 50,
                               ),
-                              onTap: ()  async{
-                                if (await _isBiometricAvailable()){
+                              onTap: () async {
+                                if (await _isBiometricAvailable()) {
                                   await _getListOfBiometricTypes();
                                   await _authenticateUser();
                                 }
@@ -277,7 +281,7 @@ class PinEnterController extends GetxController {
     _isHidden.refresh();
   }
 
-  performAction(String action) {
+  performAction(String action, BuildContext context) {
     print("clicked $action");
     if ("CLR" == action) {
       //clear last field
@@ -288,7 +292,12 @@ class PinEnterController extends GetxController {
       return;
     }
     if ("OK" == action) {
-      //perform  ok action
+      var configurationService =
+          Provider.of<ConfigurationService>(context, listen: false);
+      if (_pinValue.value == configurationService.getPin()) {
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('/home', (route) => false);
+      }
       return;
     }
     if (pinValue.length == MAX_PIN_SIZE) {
