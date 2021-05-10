@@ -13,7 +13,12 @@ import 'package:provider/provider.dart';
 final formKey = GlobalKey<FormBuilderState>();
 var formData = {};
 
-class WalletProfileSetupPage extends HookWidget {
+class WalletProfileSetupPage extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _WalletProfileSetupPageState();
+}
+
+class _WalletProfileSetupPageState extends State<WalletProfileSetupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,9 +60,8 @@ class WalletProfileSetupPage extends HookWidget {
                           ),
                           initialValue: formData['username'],
                           onChange: (v) {
-                            useEffect(() {
+                            setState(() {
                               formData = {...formData, 'username': v};
-                              return null;
                             });
                           },
                         ),
@@ -75,9 +79,8 @@ class WalletProfileSetupPage extends HookWidget {
                           ]),
                           initialValue: formData['email'],
                           onChange: (v) {
-                            useEffect(() {
+                            setState(() {
                               formData = {...formData, 'email': v};
-                              return null;
                             });
                           },
                         ),

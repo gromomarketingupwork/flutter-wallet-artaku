@@ -92,7 +92,7 @@ class _PinEnterPageState extends State<PinEnterPage> {
         : print('User is not authenticated.');
 
     if (isAuthenticated) {
-      Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
+      Navigator.of(context).pushNamedAndRemoveUntil('/wallet', (route) => false);
     }
   }
 
@@ -296,7 +296,7 @@ class PinEnterController extends GetxController {
           Provider.of<ConfigurationService>(context, listen: false);
       if (_pinValue.value == configurationService.getPin()) {
         Navigator.of(context)
-            .pushNamedAndRemoveUntil('/home', (route) => false);
+            .pushNamedAndRemoveUntil('/wallet', (route) => false);
       }
       return;
     }

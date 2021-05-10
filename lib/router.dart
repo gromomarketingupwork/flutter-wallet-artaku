@@ -51,10 +51,13 @@ Map<String, WidgetBuilder> getRoutes(context) {
         WalletSetupProvider(builder: (context, store) {
           return PinEnterPage();
         }),
-    '/home': (BuildContext context) =>
-        WalletProvider(builder: (context, store) {
-          return HomePage();
-        }),
+    '/home': (BuildContext context) {
+      return WalletProvider(builder: (context, store) {
+        var store = useWallet(context);
+        store.fetchOwnBalance();
+        return HomePage();
+      });
+    },
     '/your-wallet': (BuildContext context) {
       var configurationService = Provider.of<ConfigurationService>(context);
       if (!configurationService.didSetupWallet()) {
@@ -71,7 +74,7 @@ Map<String, WidgetBuilder> getRoutes(context) {
       });
     },
     '/wallet': (BuildContext context) =>
-        WalletSetupProvider(builder: (context, store) {
+        WalletProvider(builder: (context, store) {
           return WalletPage();
         }),
     '/backup-wallet': (BuildContext context) =>
