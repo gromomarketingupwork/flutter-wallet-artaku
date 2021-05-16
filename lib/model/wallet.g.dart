@@ -18,6 +18,8 @@ class _$Wallet extends Wallet {
   @override
   final bool loading;
   @override
+  final List<NFTColor> walletColors;
+  @override
   final BuiltList<String> errors;
 
   factory _$Wallet([void Function(WalletBuilder) updates]) =>
@@ -29,12 +31,15 @@ class _$Wallet extends Wallet {
       this.tokenBalance,
       this.ethBalance,
       this.loading,
+      this.walletColors,
       this.errors})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
         tokenBalance, 'Wallet', 'tokenBalance');
     BuiltValueNullFieldError.checkNotNull(ethBalance, 'Wallet', 'ethBalance');
     BuiltValueNullFieldError.checkNotNull(loading, 'Wallet', 'loading');
+    BuiltValueNullFieldError.checkNotNull(
+        walletColors, 'Wallet', 'walletColors');
   }
 
   @override
@@ -53,6 +58,7 @@ class _$Wallet extends Wallet {
         tokenBalance == other.tokenBalance &&
         ethBalance == other.ethBalance &&
         loading == other.loading &&
+        walletColors == other.walletColors &&
         errors == other.errors;
   }
 
@@ -61,10 +67,12 @@ class _$Wallet extends Wallet {
     return $jf($jc(
         $jc(
             $jc(
-                $jc($jc($jc(0, address.hashCode), privateKey.hashCode),
-                    tokenBalance.hashCode),
-                ethBalance.hashCode),
-            loading.hashCode),
+                $jc(
+                    $jc($jc($jc(0, address.hashCode), privateKey.hashCode),
+                        tokenBalance.hashCode),
+                    ethBalance.hashCode),
+                loading.hashCode),
+            walletColors.hashCode),
         errors.hashCode));
   }
 
@@ -76,6 +84,7 @@ class _$Wallet extends Wallet {
           ..add('tokenBalance', tokenBalance)
           ..add('ethBalance', ethBalance)
           ..add('loading', loading)
+          ..add('walletColors', walletColors)
           ..add('errors', errors))
         .toString();
   }
@@ -104,6 +113,11 @@ class WalletBuilder implements Builder<Wallet, WalletBuilder> {
   bool get loading => _$this._loading;
   set loading(bool loading) => _$this._loading = loading;
 
+  List<NFTColor> _walletColors;
+  List<NFTColor> get walletColors => _$this._walletColors;
+  set walletColors(List<NFTColor> walletColors) =>
+      _$this._walletColors = walletColors;
+
   ListBuilder<String> _errors;
   ListBuilder<String> get errors =>
       _$this._errors ??= new ListBuilder<String>();
@@ -119,6 +133,7 @@ class WalletBuilder implements Builder<Wallet, WalletBuilder> {
       _tokenBalance = $v.tokenBalance;
       _ethBalance = $v.ethBalance;
       _loading = $v.loading;
+      _walletColors = $v.walletColors;
       _errors = $v.errors?.toBuilder();
       _$v = null;
     }
@@ -150,6 +165,8 @@ class WalletBuilder implements Builder<Wallet, WalletBuilder> {
                   ethBalance, 'Wallet', 'ethBalance'),
               loading: BuiltValueNullFieldError.checkNotNull(
                   loading, 'Wallet', 'loading'),
+              walletColors: BuiltValueNullFieldError.checkNotNull(
+                  walletColors, 'Wallet', 'walletColors'),
               errors: _errors?.build());
     } catch (_) {
       String _$failedField;

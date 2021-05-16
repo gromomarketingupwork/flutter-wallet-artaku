@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:etherwallet/model/nft_color.dart';
 import 'package:web3dart/web3dart.dart';
 
 typedef TransferEvent = void Function(
@@ -24,9 +25,78 @@ class ContractService implements IContractService {
   ContractEvent _transferEvent() => contract.event('Transfer');
   ContractFunction _balanceFunction() => contract.function('balanceOf');
   ContractFunction _sendFunction() => contract.function('transfer');
-
+  ContractFunction _sendFunctionNFT() => contract.function('transferFrom');
+  ContractFunction _checkOwner() => contract.function('ownerOf');
+  ContractFunction _getNextTokenId() => contract.function("nextTokenId");
+  ContractFunction _getColorFromId() => contract.function("colors");
   Future<Credentials> getCredentials(String privateKey) =>
       client.credentialsFromPrivateKey(privateKey);
+
+  Future<List<NFTColor>> getAllOwnedTokens(BigInt tokenBalance, EthereumAddress from) async {
+    var response = await client.call(
+      contract: contract,
+      function: _getNextTokenId(),
+      params: []
+    );
+    List<NFTColor> colorList = new List();
+    BigInt totalSupply =  response.first as BigInt;
+    for(BigInt i = BigInt.zero; i< totalSupply ; i=i+BigInt.from(1)){
+      var ownerResponse = await client.call(
+          contract: contract,
+          function: _checkOwner(),
+          params: [i]);
+      EthereumAddress ownerAddress = ownerResponse.first as EthereumAddress;
+      if(ownerAddress == from){
+        var colorResponse = await client.call(
+            contract: contract,
+            function: _getColorFromId(),
+            params: [i]);
+        NFTColor color = new NFTColor(tokenId: i, colorHex: colorResponse.first as String);
+        colorList.add(color);
+      }
+    }
+    return colorList;
+
+  }
+
+  Future<String> sendNFT(
+      String privateKey, EthereumAddress receiver, BigInt tokenId,
+      {TransferEvent onTransfer, Function onError}) async {
+    final credentials = await this.getCredentials(privateKey);
+    final from = await credentials.extractAddress();
+    final networkId = await client.getNetworkId();
+
+    StreamSubscription event;
+    // Workaround once sendTransacton doesn't return a Promise containing confirmation / receipt
+    if (onTransfer != null) {
+      event = listenTransfer((from, to, value) async {
+        onTransfer(from, to, value);
+        await event.cancel();
+      }, take: 1);
+    }
+
+    try {
+      final transactionId = await client.sendTransaction(
+        credentials,
+        Transaction.callContract(
+          contract: contract,
+          function: _sendFunctionNFT(),
+          parameters: [from, receiver, tokenId],
+          from: from,
+        ),
+        chainId: networkId,
+      );
+      print('transact started $transactionId');
+      return transactionId;
+    } catch (ex) {
+      if (onError != null) {
+        onError(ex);
+      }
+      return null;
+    }
+  }
+
+
 
   Future<String> send(
       String privateKey, EthereumAddress receiver, BigInt amount,

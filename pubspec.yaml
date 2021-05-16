@@ -51,6 +51,9 @@ dependencies:
   flutter_form_builder: ^6.0.0
   get: ^3.24.0
   local_auth: ^1.1.5
+  qr_code_scanner: ^0.4.0
+  vibration: ^1.7.3
+
 
 
 
@@ -83,6 +86,8 @@ flutter:
   assets:
     - assets/icons/
     - TargaryenCoin.json
+    - MadGeniusCard.json
+    - Color.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -27,7 +27,7 @@ class WalletPage extends HookWidget {
     tokenData = {
       ...tokenData,
       'ETH': store.state.ethBalance,
-      'TOKEN': store.state.tokenBalance
+      'COLOR': store.state.tokenBalance
     };
     return Scaffold(
       backgroundColor: ANColor.primary,
@@ -97,8 +97,8 @@ class WalletPage extends HookWidget {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          EthAmountFormatter(e.value).format() + "   " + e.key,
+                                        Text(e.key=='ETH'?
+                                          EthAmountFormatter(e.value).format() : e.value.toString()+ "   " + e.key,
                                           style: header1.copyWith(
                                               color: ANColor.backgroundText),
                                         ),
@@ -108,6 +108,13 @@ class WalletPage extends HookWidget {
                                 ))
                             .toList(),
                 )
+              ),
+              Expanded(
+                child: ListView(
+                  children: store.state.walletColors.map((e) {
+                    return Text("Id: "+ e.tokenId.toString()+ " Color Code: "+ e.colorHex, style: header3.copyWith(color: ANColor.backgroundText));
+                  }).toList(),
+                ),
               ),
               ANButton(
                 height: 50,

@@ -44,7 +44,7 @@ class _BackupWalletPageState extends State<BackupWalletPage> {
                   color: ANColor.white,
                   borderRadius: BorderRadius.all(Radius.circular(10))),
               child: Text(
-                args['mnemonic']!=null?args['mnemonic']: "",
+                args['mnemonic'] != null ? args['mnemonic'] : "",
                 style: header2.copyWith(fontStyle: FontStyle.italic),
               ),
             ),
@@ -66,9 +66,11 @@ class _BackupWalletPageState extends State<BackupWalletPage> {
               label: "Continue",
               buttonColor: ANColor.white,
               borderRadius: 25,
-              onClick: (){
-                var configurationService = Provider.of<ConfigurationService>(context, listen: false);
-                if(configurationService.getEmail()==null || configurationService.getEmail().isEmpty){
+              onClick: () {
+                var configurationService =
+                    Provider.of<ConfigurationService>(context, listen: false);
+                if (configurationService.getEmail() == null ||
+                    configurationService.getEmail().isEmpty) {
                   Navigator.of(context).pushNamed('/profile-setup');
                 }
               },

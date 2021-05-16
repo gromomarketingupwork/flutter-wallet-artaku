@@ -5,6 +5,7 @@ import 'package:etherwallet/screens/pin_enter_page.dart';
 import 'package:etherwallet/screens/pin_set_page.dart';
 import 'package:etherwallet/screens/profile_setup.dart';
 import 'package:etherwallet/screens/restore_wallet_page.dart';
+import 'package:etherwallet/screens/send_nft_screen.dart';
 import 'package:etherwallet/screens/setup_restore.dart';
 import 'package:etherwallet/screens/wallet_page.dart';
 import 'package:etherwallet/screens/your_wallet_page.dart';
@@ -53,8 +54,6 @@ Map<String, WidgetBuilder> getRoutes(context) {
         }),
     '/home': (BuildContext context) {
       return WalletProvider(builder: (context, store) {
-        var store = useWallet(context);
-        store.fetchOwnBalance();
         return HomePage();
       });
     },
@@ -102,6 +101,13 @@ Map<String, WidgetBuilder> getRoutes(context) {
     '/qrcode_reader': (BuildContext context) => QRCodeReaderPage(
           title: "Scan QRCode",
           onScanned: ModalRoute.of(context).settings.arguments,
-        )
+        ),
+    '/qrcode_reader-new': (BuildContext context) => WalletTransferProvider(
+      builder: (context, store){
+        return SendNFTScreen(
+          nftColor: ModalRoute.of(context).settings.arguments,
+        );
+      },
+    )
   };
 }

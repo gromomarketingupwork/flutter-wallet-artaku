@@ -47,4 +47,31 @@ class WalletTransferHandler {
 
     return completer.future;
   }
+
+  Future<bool> transferNFT(String to, BigInt tokenId) async {
+    var completer = new Completer<bool>();
+    var privateKey = _configurationService.getPrivateKey();
+
+    _store.dispatch(WalletTransferStarted());
+
+    try {
+      await _contractService.sendNFT(
+        privateKey,
+        EthereumAddress.fromHex(to),
+        tokenId,
+        onTransfer: (from, to, value) {
+          completer.complete(true);
+        },
+        onError: (ex) {
+          _store.dispatch(WalletTransferError(ex.toString()));
+          completer.complete(false);
+        },
+      );
+    } catch (ex) {
+      _store.dispatch(WalletTransferError(ex.toString()));
+      completer.complete(false);
+    }
+
+    return completer.future;
+  }
 }

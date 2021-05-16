@@ -20,7 +20,7 @@ Future<List<SingleChildWidget>> createProviders(AppConfigParams params) async {
   final configurationService = ConfigurationService(sharedPrefs);
   final addressService = AddressService(configurationService);
   final contract = await ContractParser.fromAssets(
-      'TargaryenCoin.json', params.contractAddress);
+      'Color.json', params.contractAddress);
 
   final contractService = ContractService(client, contract);
 

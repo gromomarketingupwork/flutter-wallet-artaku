@@ -17,12 +17,16 @@ abstract class WalletSetup implements Built<WalletSetup, WalletSetupBuilder> {
   String get privateKey;
 
   WalletCreateSteps get step;
+
   WalletSetupMethod get method;
+
   bool get loading;
+
   @nullable
   BuiltList<String> get errors;
 
   WalletSetup._();
+
   factory WalletSetup([void Function(WalletSetupBuilder) updates]) =>
       _$WalletSetup((b) => b
         ..step = WalletCreateSteps.display
