@@ -104,8 +104,10 @@ Map<String, WidgetBuilder> getRoutes(context) {
         ),
     '/qrcode_reader-new': (BuildContext context) => WalletTransferProvider(
       builder: (context, store){
+        List<dynamic> argumentsList = ModalRoute.of(context).settings.arguments;
         return SendNFTScreen(
-          nftColor: ModalRoute.of(context).settings.arguments,
+          nftColor: argumentsList[0],
+          onSuccess: argumentsList[1]
         );
       },
     )

@@ -5,9 +5,9 @@
 import 'dart:io';
 
 import 'package:etherwallet/components/appbar/an_appbar.dart';
-import 'package:etherwallet/components/button/an_button.dart';
 import 'package:etherwallet/components/form/an_text_field.dart';
 import 'package:etherwallet/components/form/form_field_label.dart';
+import 'package:etherwallet/components/snackbar/an_snack_bar.dart';
 import 'package:etherwallet/constants/colors.dart';
 import 'package:etherwallet/constants/syles.dart';
 import 'package:etherwallet/context/transfer/wallet_transfer_provider.dart';
@@ -16,13 +16,15 @@ import 'package:etherwallet/model/nft_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:vibration/vibration.dart';
 
 final addressKey = GlobalKey<FormBuilderState>();
 
 class SendNFTScreen extends StatefulWidget {
-  SendNFTScreen({this.nftColor});
+  SendNFTScreen({this.nftColor, this.onSuccess});
 
+  final ValueChanged<bool> onSuccess;
   final NFTColor nftColor;
   final bool closeWhenScanned = false;
 
@@ -31,12 +33,16 @@ class SendNFTScreen extends StatefulWidget {
 }
 
 class _SendNFTScreenState extends State<SendNFTScreen> {
+  final RoundedLoadingButtonController _btnController =
+      RoundedLoadingButtonController();
+
   static final RegExp _basicAddress =
       RegExp(r'^(0x)?[0-9a-f]{40}', caseSensitive: false);
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   Barcode result;
   QRViewController controller;
   String destinationAddress;
+  bool loading = false;
 
   // In order to get hot reload to work we need to pause the camera if the platform
   // is android, or resume the camera if the platform is iOS.
@@ -132,19 +138,30 @@ class _SendNFTScreenState extends State<SendNFTScreen> {
             SizedBox(
               height: 20,
             ),
-            ANButton(
-              label: "Transfer",
+            RoundedLoadingButton(
+              child: Text(
+                "Transfer",
+                style: header3.copyWith(color: ANColor.black),
+              ),
               width: 150,
-              buttonColor: ANColor.white,
+              color: ANColor.white,
               borderRadius: 25,
               height: 50,
-              onClick: () async {
+              valueColor: ANColor.primary,
+              successColor: ANColor.white,
+              onPressed: () async {
                 var success = await transferStore.transferNFT(
                     destinationAddress, widget.nftColor.tokenId);
                 if (success) {
+                  _btnController.success();
                   Navigator.pop(context);
+                  widget.onSuccess(true);
+                } else {
+                  _btnController.error();
+                  AppSnackbar.error(context, "Error in transaction");
                 }
               },
+              controller: _btnController,
             ),
             SizedBox(
               height: 20,
