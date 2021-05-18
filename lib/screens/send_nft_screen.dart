@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:etherwallet/components/appbar/an_appbar.dart';
@@ -157,7 +158,6 @@ class _SendNFTScreenState extends State<SendNFTScreen> {
                   Navigator.pop(context);
                   widget.onSuccess(true);
                 } else {
-                  _btnController.error();
                   AppSnackbar.error(context, "Error in transaction");
                 }
               },
