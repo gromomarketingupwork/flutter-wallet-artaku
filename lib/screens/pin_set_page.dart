@@ -1,6 +1,7 @@
 import 'package:etherwallet/components/appbar/an_appbar.dart';
 import 'package:etherwallet/components/button/an_button.dart';
 import 'package:etherwallet/components/form/an_text_field.dart';
+import 'package:etherwallet/components/snackbar/an_snack_bar.dart';
 import 'package:etherwallet/constants/an_assets.dart';
 import 'package:etherwallet/constants/colors.dart';
 import 'package:etherwallet/constants/syles.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 final pinFormKey = GlobalKey<FormBuilderState>();
 var pinFormData = {};
@@ -21,6 +23,8 @@ class PinSetPage extends StatefulWidget {
 }
 
 class _PinSetPageState extends State<PinSetPage> {
+  final RoundedLoadingButtonController _btnController =
+  RoundedLoadingButtonController();
   final LocalAuthentication _localAuthentication = LocalAuthentication();
 
   Future<bool> _isBiometricAvailable() async {
@@ -129,20 +133,36 @@ class _PinSetPageState extends State<PinSetPage> {
               SizedBox(
                 height: 32,
               ),
-              ANButton(
-                label: "Set Pin",
+              RoundedLoadingButton(
+                child: Text(
+                  "Set Pin",
+                  style: header3.copyWith(color: ANColor.black),
+                ),
                 width: 150,
-                buttonColor: ANColor.white,
+                color: ANColor.white,
                 borderRadius: 25,
                 height: 50,
-                onClick: () {
+                valueColor: ANColor.primary,
+                successColor: ANColor.white,
+                onPressed: () async {
                   if (pinFormKey.currentState.saveAndValidate()) {
+                    Future.delayed(Duration(milliseconds: 3000), (){
+                      _btnController.reset();
+                    });
                     var configurationService =
-                        Provider.of<ConfigurationService>(context,
-                            listen: false);
+                    Provider.of<ConfigurationService>(context,
+                        listen: false);
                     configurationService.setPin(pinFormData['pin']);
+                    AppSnackbar.success(context, "Pin set successfully");
+
+                  }else{
+                    _btnController.error();
+                    Future.delayed(Duration(milliseconds: 3000), (){
+                      _btnController.reset();
+                    });
                   }
                 },
+                controller: _btnController,
               ),
               SizedBox(
                 height: 128,

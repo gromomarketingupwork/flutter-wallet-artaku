@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:etherwallet/components/appbar/an_appbar.dart';
 import 'package:etherwallet/components/button/an_button.dart';
 import 'package:etherwallet/components/form/an_text_field.dart';
@@ -122,6 +124,10 @@ class _RestoreWalletPageState extends State<RestoreWalletPage>{
                         }
                       } else {
                         _btnController.error();
+                        Future.delayed(Duration(milliseconds: 3000), (){
+                          _btnController.reset();
+                        });
+
                         AppSnackbar.error(context, "Error in importing wallet");
                       }
                     },
