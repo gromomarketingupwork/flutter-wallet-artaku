@@ -365,12 +365,12 @@ packages:
     source: hosted
     version: "0.1.2"
   http:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.2"
+    version: "0.12.1"
   http_multi_server:
     dependency: transitive
     description:
@@ -414,12 +414,12 @@ packages:
     source: hosted
     version: "0.6.3"
   json_annotation:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: json_annotation
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.0.0"
+    version: "3.1.1"
   json_rpc_2:
     dependency: transitive
     description:
@@ -433,7 +433,7 @@ packages:
       name: json_serializable
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.0.2"
+    version: "3.5.1"
   local_auth:
     dependency: "direct main"
     description:
