@@ -1,13 +1,17 @@
+import 'dart:io';
+
 import 'package:etherwallet/components/appbar/an_appbar.dart';
 import 'package:etherwallet/components/button/an_button.dart';
 import 'package:etherwallet/components/form/an_text_field.dart';
+import 'package:etherwallet/components/snackbar/image_selector.dart';
 import 'package:etherwallet/constants/an_assets.dart';
 import 'package:etherwallet/constants/colors.dart';
 import 'package:etherwallet/constants/syles.dart';
 import 'package:etherwallet/service/configuration_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 final formKey = GlobalKey<FormBuilderState>();
@@ -19,6 +23,8 @@ class WalletProfileSetupPage extends StatefulWidget {
 }
 
 class _WalletProfileSetupPageState extends State<WalletProfileSetupPage> {
+  File selectedImage;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,10 +45,22 @@ class _WalletProfileSetupPageState extends State<WalletProfileSetupPage> {
                     "Create your profile",
                     style: header1.copyWith(color: ANColor.backgroundText),
                   ),
-                  Image.asset(
-                    ANAssets.profileImage,
-                    height: 250,
-                    width: 250,
+                  Stack(
+                    children: [
+                      Container(
+                        height: 250,
+                        width: 250,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(125)),
+                        child: ClipRRect(
+                          child: Image.asset(
+                            selectedImage ?? ANAssets.profileImage,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      Align(child: Icon(FontAwesomeIcons.camera))
+                    ],
                   ),
                   FormBuilder(
                     key: formKey,
@@ -87,6 +105,15 @@ class _WalletProfileSetupPageState extends State<WalletProfileSetupPage> {
                         SizedBox(
                           height: 50,
                         ),
+                        ImageSelector(
+                          width: MediaQuery.of(context).size.width * 0.45,
+                          height: MediaQuery.of(context).size.width * 0.35,
+                          valueChanged: (data) {
+                            setState(() {
+                              selectedImage = data;
+                            });
+                          },
+                        )
                       ],
                     ),
                   ),

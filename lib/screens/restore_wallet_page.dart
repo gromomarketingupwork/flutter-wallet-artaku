@@ -25,7 +25,7 @@ class RestoreWalletPage extends StatefulWidget{
 
 }
 
-class _RestoreWalletPageState extends State<RestoreWalletPage>{
+class _RestoreWalletPageState extends State<RestoreWalletPage> {
   final RoundedLoadingButtonController _btnController =
   RoundedLoadingButtonController();
   String passPhrase = "";
