@@ -3,9 +3,13 @@ import 'dart:io';
 import 'package:etherwallet/components/appbar/an_appbar.dart';
 import 'package:etherwallet/components/button/an_button.dart';
 import 'package:etherwallet/components/form/an_text_field.dart';
+import 'package:etherwallet/components/snackbar/an_snack_bar.dart';
 import 'package:etherwallet/constants/an_assets.dart';
 import 'package:etherwallet/constants/colors.dart';
 import 'package:etherwallet/constants/syles.dart';
+import 'package:etherwallet/context/wallet/wallet_provider.dart';
+import 'package:etherwallet/network/profile_network_services.dart';
+import 'package:etherwallet/network/wallet_network_service.dart';
 import 'package:etherwallet/service/configuration_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -14,6 +18,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 final formKey = GlobalKey<FormBuilderState>();
 var formData = {};
@@ -26,8 +31,12 @@ class WalletProfileSetupPage extends StatefulWidget {
 class _WalletProfileSetupPageState extends State<WalletProfileSetupPage> {
   File selectedImage;
 
+  ProfileNetworkService profileNetworkService = new ProfileNetworkService();
+  final RoundedLoadingButtonController _btnController =
+  RoundedLoadingButtonController();
   @override
   Widget build(BuildContext context) {
+    var store = useWallet(context);
     return Scaffold(
       backgroundColor: ANColor.primary,
       appBar: ANAppBar(appBar: AppBar()),
@@ -47,7 +56,9 @@ class _WalletProfileSetupPageState extends State<WalletProfileSetupPage> {
                     "Create your profile",
                     style: header1.copyWith(color: ANColor.backgroundText),
                   ),
-                  SizedBox(height: 48,),
+                  SizedBox(
+                    height: 48,
+                  ),
                   Center(
                     child: Stack(
                       children: [
@@ -165,23 +176,43 @@ class _WalletProfileSetupPageState extends State<WalletProfileSetupPage> {
                   SizedBox(
                     height: 20,
                   ),
-                  ANButton(
+                  RoundedLoadingButton(
+                    child: Text(
+                      "Continue",
+                      style: header3.copyWith(color: ANColor.black),
+                    ),
                     height: 50,
                     width: 250,
-                    textColor: ANColor.textPrimary,
-                    buttonColor: ANColor.white,
-                    onClick: () {
+                    color: ANColor.white,
+                    borderRadius: 25,
+                    valueColor: ANColor.primary,
+                    successColor: ANColor.white,
+
+                    onPressed: () async {
                       if (formKey.currentState.saveAndValidate()) {
                         var configurationService =
-                            Provider.of<ConfigurationService>(context,
-                                listen: false);
-                        configurationService.setEmail(formData['email']);
-                        configurationService.setUsername(formData['username']);
-                        Navigator.of(context).pushNamed('/pin-set');
+                        Provider.of<ConfigurationService>(context,
+                            listen: false);
+                        try {
+                          await profileNetworkService.createWalletProfile(
+                              store.state.address.toString(),
+                              formData['username'],
+                              formData['email'],
+                              selectedImage);
+                          configurationService.setEmail(formData['email']);
+                          configurationService.setUsername(formData['username']);
+                          Navigator.of(context).pushNamed('/pin-set');
+                        } catch (e) {
+                          _btnController.error();
+                          Future.delayed(Duration(milliseconds: 3000), (){
+                            _btnController.reset();
+                          });
+                          AppSnackbar.error(context, "Cannot create profile");
+                        }
                       }
                     },
-                    borderRadius: 25,
-                    label: "Continue",
+                    controller: _btnController,
+
                   )
                 ],
               ),

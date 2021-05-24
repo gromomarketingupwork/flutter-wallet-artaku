@@ -1,25 +1,38 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:etherwallet/model/profile_dto.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 
 class ProfileNetworkService {
-  Future<WalletProfile> createWalletProfile(WalletProfile walletProfile) async {
-    var body = {
-      'userName': walletProfile.userName,
-      'email': walletProfile.createdAt,
-      'walletAddress': walletProfile.walletAddress,
-      'profile_image': ''
+  Future<bool> createWalletProfile(
+      String address, String userName, String email, File profilePhoto) async {
+    var request = http.MultipartRequest(
+        'POST',
+        Uri(
+            scheme: 'https',
+            host: '65c4e4bd-efbb-4e64-b2d2-705b78423e8d.mock.pstmn.io',
+            path: '/user/' + address));
+    Map<String, String> requestForm = <String, String>{
+      'username': userName,
+      'email': email
     };
-
-    var response = await http.post(Uri.https("demo.url.com", '/wallet'),
-        body: jsonEncode(body), headers: {"Content-Type": "application/json"});
-    if (response.statusCode == 201) {
-      Map responseMap = jsonDecode(response.body);
-      dynamic walletProfile = responseMap['wallet'];
-      return walletProfile.map((json) => WalletProfile.fromJson(json));
+    request.fields.addAll(requestForm);
+    request.files.add(http.MultipartFile.fromBytes(
+        'profile_photo', profilePhoto.readAsBytesSync(),
+        filename: profilePhoto.path.split('/').last,
+        contentType: MediaType(
+            'image', profilePhoto.path.split('/').last.split('.').last)));
+    var response = await request.send();
+    Map<String, dynamic> data = {};
+    if (response.statusCode == 200) {
+      data = jsonDecode(await response.stream.transform(utf8.decoder).join());
+      WalletProfile walletProfile =  WalletProfile.fromJson(data);
+      return true;
     } else {
       throw Exception('Failed to create profile');
     }
+    return false;
   }
 }

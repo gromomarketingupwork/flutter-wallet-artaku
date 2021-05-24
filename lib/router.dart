@@ -45,6 +45,10 @@ Map<String, WidgetBuilder> getRoutes(context) {
         }),
     '/profile-setup': (BuildContext context) {
       return WalletProvider(builder: (context, store) {
+        useEffect((){
+          store.initialise();
+          return null;
+        },[]);
         return WalletProfileSetupPage();
       });
     },

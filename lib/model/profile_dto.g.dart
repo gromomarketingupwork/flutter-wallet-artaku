@@ -1,3 +1,5 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
 part of 'profile_dto.dart';
 
 // **************************************************************************
@@ -6,17 +8,15 @@ part of 'profile_dto.dart';
 
 WalletProfile _$WalletProfileFromJson(Map<String, dynamic> json) {
   return WalletProfile(
-    json['userName'] as String,
-    json['email'] as String,
-    json['createdAt'] as String,
-    json['walletAddress'] as String,
+    json['username'] as String,
+    json['address'] as String,
+    json['profile_photo'] as String,
   );
 }
 
 Map<String, dynamic> _$WalletProfileToJson(WalletProfile instance) =>
     <String, dynamic>{
-      'userName': instance.userName,
-      'email': instance.email,
-      'createdAt': instance.createdAt,
-      'walletAddress': instance.walletAddress,
+      'username': instance.userName,
+      'address': instance.address,
+      'profile_photo': instance.profilePhoto,
     };
