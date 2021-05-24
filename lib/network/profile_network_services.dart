@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 
 class ProfileNetworkService {
-  Future<bool> createWalletProfile(
+  Future<WalletProfile> createWalletProfile(
       String address, String userName, String email, File profilePhoto) async {
     var request = http.MultipartRequest(
         'POST',
@@ -28,11 +28,9 @@ class ProfileNetworkService {
     Map<String, dynamic> data = {};
     if (response.statusCode == 200) {
       data = jsonDecode(await response.stream.transform(utf8.decoder).join());
-      WalletProfile walletProfile =  WalletProfile.fromJson(data);
-      return true;
+      return WalletProfile.fromJson(data);
     } else {
       throw Exception('Failed to create profile');
     }
-    return false;
   }
 }

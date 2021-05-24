@@ -5,13 +5,11 @@ import 'package:http/http.dart' as http;
 
 class WalletNetworkService {
   Future<WalletProfile> checkIfWalletExist(String walletAddress) async {
-    var queryParams = {'address': walletAddress};
     final response =
-        await http.get(Uri.https("demo.url.com", '/wallet', queryParams));
+        await http.get(Uri.https("65c4e4bd-efbb-4e64-b2d2-705b78423e8d.mock.pstmn.io", '/user/'+ walletAddress+".json"));
     if (response.statusCode == 200) {
       Map responseMap = jsonDecode(response.body);
-      dynamic walletProfile = responseMap['wallet'];
-      return walletProfile.map((json) => WalletProfile.fromJson(json));
+      return WalletProfile.fromJson(responseMap);
     } else {
       throw Exception('Wallet not found');
     }
