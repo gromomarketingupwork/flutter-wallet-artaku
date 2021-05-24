@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:etherwallet/components/appbar/an_appbar.dart';
 import 'package:etherwallet/components/button/an_button.dart';
 import 'package:etherwallet/components/form/an_text_field.dart';
-import 'package:etherwallet/components/snackbar/image_selector.dart';
 import 'package:etherwallet/constants/an_assets.dart';
 import 'package:etherwallet/constants/colors.dart';
 import 'package:etherwallet/constants/syles.dart';
@@ -12,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 final formKey = GlobalKey<FormBuilderState>();
@@ -40,27 +41,80 @@ class _WalletProfileSetupPageState extends State<WalletProfileSetupPage> {
             Align(
               alignment: Alignment.center,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
                     "Create your profile",
                     style: header1.copyWith(color: ANColor.backgroundText),
                   ),
-                  Stack(
-                    children: [
-                      Container(
-                        height: 250,
-                        width: 250,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(125)),
-                        child: ClipRRect(
-                          child: Image.asset(
-                            selectedImage ?? ANAssets.profileImage,
-                            fit: BoxFit.cover,
+                  SizedBox(height: 48,),
+                  Center(
+                    child: Stack(
+                      children: [
+                        Center(
+                          child: CircleAvatar(
+                            radius: 75,
+                            backgroundColor: ANColor.white,
+                            child: selectedImage != null
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(75),
+                                    child: Image.file(
+                                      selectedImage,
+                                      width: 150,
+                                      height: 150,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )
+                                : Container(
+                                    decoration: BoxDecoration(
+                                      color: ANColor.primary,
+                                      borderRadius: BorderRadius.circular(75),
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(75),
+                                      child: Image.asset(
+                                        ANAssets.profileImage,
+                                        width: 150,
+                                        height: 150,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
                           ),
                         ),
-                      ),
-                      Align(child: Icon(FontAwesomeIcons.camera))
-                    ],
+                        Align(
+                          child: Container(
+                            height: 150,
+                            width: 150,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(75),
+                                border: Border.all(color: ANColor.white),
+                                color: Colors.transparent),
+                            child: InkWell(
+                              onTap: () {
+                                _getImage();
+                              },
+                              child: Align(
+                                alignment: Alignment(0.85, 0.85),
+                                child: Container(
+                                  height: 40,
+                                  width: 40,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      border: Border.all(color: ANColor.white),
+                                      color: ANColor.primary),
+                                  child: Icon(FontAwesomeIcons.camera,
+                                      color: ANColor.white),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 48,
                   ),
                   FormBuilder(
                     key: formKey,
@@ -103,19 +157,13 @@ class _WalletProfileSetupPageState extends State<WalletProfileSetupPage> {
                           },
                         ),
                         SizedBox(
-                          height: 50,
+                          height: 20,
                         ),
-                        ImageSelector(
-                          width: MediaQuery.of(context).size.width * 0.45,
-                          height: MediaQuery.of(context).size.width * 0.35,
-                          valueChanged: (data) {
-                            setState(() {
-                              selectedImage = data;
-                            });
-                          },
-                        )
                       ],
                     ),
+                  ),
+                  SizedBox(
+                    height: 20,
                   ),
                   ANButton(
                     height: 50,
@@ -142,5 +190,25 @@ class _WalletProfileSetupPageState extends State<WalletProfileSetupPage> {
         ),
       ),
     );
+  }
+
+  Future _getImage() async {
+    final pickedFile = await ImagePicker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      _cropImage(pickedFile.path);
+    }
+  }
+
+  Future _cropImage(filePath) async {
+    File croppedImage = await ImageCropper.cropImage(
+        sourcePath: filePath,
+        maxWidth: 1080,
+        maxHeight: 1080,
+        aspectRatio: CropAspectRatio(ratioX: 1.0, ratioY: 1.0));
+    if (croppedImage != null) {
+      setState(() {
+        selectedImage = croppedImage;
+      });
+    }
   }
 }

@@ -8,7 +8,8 @@ class ProfileNetworkService {
     var body = {
       'userName': walletProfile.userName,
       'email': walletProfile.createdAt,
-      'walletAddress': walletProfile.createdAt
+      'walletAddress': walletProfile.walletAddress,
+      'profile_image': ''
     };
 
     var response = await http.post(Uri.https("demo.url.com", '/wallet'),

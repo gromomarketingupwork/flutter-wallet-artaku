@@ -37,23 +37,28 @@ class _ImageSelectorState extends State<ImageSelector> {
     return InkWell(
       onTap: _image == null ? _getImage : null,
       child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: ANColor.white),
+          borderRadius: BorderRadius.circular(10),
+          color: ANColor.white.withOpacity(0.2),
+
+        ),
         height: widget.height,
         width: widget.width,
-        color: ANColor.white.withOpacity(0.2),
         child: _image == null
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
                     FontAwesomeIcons.cloudUploadAlt,
-                    color: ANColor.primary,
+                    color: ANColor.white,
                   ),
                   Divider(
                     color: Colors.transparent,
                   ),
                   Text(
                     'Choose from files',
-                    style: header4.copyWith(color: ANColor.primary),
+                    style: header4.copyWith(color: ANColor.white),
                   )
                 ],
               )
