@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:etherwallet/constants/an_paths.dart';
+import 'package:etherwallet/constants/an_urls.dart';
 import 'package:etherwallet/model/profile_dto.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
@@ -12,8 +14,8 @@ class ProfileNetworkService {
         'POST',
         Uri(
             scheme: 'https',
-            host: '65c4e4bd-efbb-4e64-b2d2-705b78423e8d.mock.pstmn.io',
-            path: '/user/' + address));
+            host: ANUrl.AN_URL,
+            path: ANPaths.USERS + '/' + address));
     Map<String, String> requestForm = <String, String>{
       'username': userName,
       'email': email
