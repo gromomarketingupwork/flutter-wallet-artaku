@@ -8,12 +8,13 @@ import 'package:etherwallet/service/contract_service.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:web3dart/credentials.dart';
 
+typedef void TransferListenFunction(EthereumAddress from, EthereumAddress to,
+    String transactionHash, BigInt tokenId);
+
 class WalletTransferHandler {
-  WalletTransferHandler(
-    this._store,
-    this._contractService,
-    this._configurationService,
-  );
+  WalletTransferHandler(this._store,
+      this._contractService,
+      this._configurationService);
 
   final Store<WalletTransfer, WalletTransferAction> _store;
   final ContractService _contractService;
@@ -32,7 +33,7 @@ class WalletTransferHandler {
         privateKey,
         EthereumAddress.fromHex(to),
         BigInt.from(double.parse(amount) * pow(10, 18)),
-        onTransfer: (from, to, value) {
+        onTransfer: (from, to, value, transactionId) {
           completer.complete(true);
         },
         onError: (ex) {
@@ -48,7 +49,7 @@ class WalletTransferHandler {
     return completer.future;
   }
 
-  Future<bool> transferNFT(String to, BigInt tokenId) async {
+  Future<bool> transferNFT(String to, BigInt tokenId, TransferListenFunction transferListenFunction) async {
     var completer = new Completer<bool>();
     var privateKey = _configurationService.getPrivateKey();
 
@@ -59,7 +60,8 @@ class WalletTransferHandler {
         privateKey,
         EthereumAddress.fromHex(to),
         tokenId,
-        onTransfer: (from, to, value) {
+        onTransfer: (from, to, value, transactionId) {
+          transferListenFunction(from, to, transactionId, value);
           completer.complete(true);
         },
         onError: (ex) {

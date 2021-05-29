@@ -3,7 +3,7 @@ import 'package:etherwallet/model/nft_color.dart';
 import 'package:web3dart/web3dart.dart';
 
 typedef TransferEvent = void Function(
-    EthereumAddress from, EthereumAddress to, BigInt value);
+    EthereumAddress from, EthereumAddress to, BigInt value, String transactionId);
 
 abstract class IContractService {
   Future<Credentials> getCredentials(String privateKey);
@@ -18,7 +18,7 @@ abstract class IContractService {
 
 class ContractService implements IContractService {
   ContractService(this.client, this.contract);
-
+  String transactionId;
   final Web3Client client;
   final DeployedContract contract;
 
@@ -67,16 +67,16 @@ class ContractService implements IContractService {
     final networkId = await client.getNetworkId();
 
     StreamSubscription event;
-    // Workaround once sendTransacton doesn't return a Promise containing confirmation / receipt
+    // Workaround once send Transacton doesn't return a Promise containing confirmation / receipt
     if (onTransfer != null) {
-      event = listenTransfer((from, to, value) async {
-        onTransfer(from, to, value);
+      event = listenTransfer((from, to, value, tid) async {
+        onTransfer(from, to, value, tid);
         await event.cancel();
       }, take: 1);
     }
 
     try {
-      final transactionId = await client.sendTransaction(
+      transactionId = await client.sendTransaction(
         credentials,
         Transaction.callContract(
           contract: contract,
@@ -108,14 +108,14 @@ class ContractService implements IContractService {
     StreamSubscription event;
     // Workaround once sendTransacton doesn't return a Promise containing confirmation / receipt
     if (onTransfer != null) {
-      event = listenTransfer((from, to, value) async {
-        onTransfer(from, to, value);
+      event = listenTransfer((from, to, value, tid) async {
+        onTransfer(from, to, value, transactionId);
         await event.cancel();
       }, take: 1);
     }
 
     try {
-      final transactionId = await client.sendTransaction(
+      transactionId = await client.sendTransaction(
         credentials,
         Transaction.callContract(
           contract: contract,
@@ -170,7 +170,7 @@ class ContractService implements IContractService {
       print('$to}');
       print('$value}');
 
-      onTransfer(from, to, value);
+      onTransfer(from, to, value, transactionId);
     });
   }
 

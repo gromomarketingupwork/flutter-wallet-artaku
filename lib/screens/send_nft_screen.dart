@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'dart:async';
 import 'dart:io';
 
 import 'package:etherwallet/components/appbar/an_appbar.dart';
+import 'package:etherwallet/components/custom_popup.dart';
 import 'package:etherwallet/components/form/an_text_field.dart';
 import 'package:etherwallet/components/form/form_field_label.dart';
 import 'package:etherwallet/components/snackbar/an_snack_bar.dart';
@@ -28,6 +28,7 @@ class SendNFTScreen extends StatefulWidget {
   final ValueChanged<bool> onSuccess;
   final NFTColor nftColor;
   final bool closeWhenScanned = false;
+  final bool showPopup = false;
 
   @override
   State<StatefulWidget> createState() => _SendNFTScreenState();
@@ -152,11 +153,19 @@ class _SendNFTScreenState extends State<SendNFTScreen> {
               successColor: ANColor.white,
               onPressed: () async {
                 var success = await transferStore.transferNFT(
-                    destinationAddress, widget.nftColor.tokenId);
+                    destinationAddress,
+                    widget.nftColor.tokenId,
+                    (from, to, transactionId, id) {
+                      if(from!=null){
+                        showDialog(context: context, builder: (BuildContext context){
+                          return CustomDialogBox(from: from, to: to, transactionId: transactionId ,nftColor: widget.nftColor);
+                        });
+                      }
+                    });
                 if (success) {
                   _btnController.success();
-                  Navigator.pop(context);
-                  widget.onSuccess(true);
+                  // Navigator.pop(context);
+                  // widget.onSuccess(true);
                 } else {
                   AppSnackbar.error(context, "Error in transaction");
                 }
