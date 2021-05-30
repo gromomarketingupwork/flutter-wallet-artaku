@@ -48,7 +48,7 @@ class ANButton extends StatelessWidget {
             width: width,
             child: Text(
               this.label ?? "Button",
-              style: header4.copyWith(color: textColor),
+              style: header5.copyWith(color: textColor, fontWeight: FontWeight.w500),
             ),
           ),
         ),
@@ -107,7 +107,7 @@ class DTIconButton extends StatelessWidget {
   }
 }
 
-class DTOutlinedButton extends StatelessWidget {
+class ANOutlinedButton extends StatelessWidget {
   final String label;
   final Function onClick;
   final bool disabled;
@@ -119,8 +119,9 @@ class DTOutlinedButton extends StatelessWidget {
   final Widget icon;
   final double width;
   final Color textColor;
+  final Color borderColor;
 
-  const DTOutlinedButton(
+  const ANOutlinedButton(
       {Key key,
       this.label,
       this.onClick,
@@ -130,6 +131,7 @@ class DTOutlinedButton extends StatelessWidget {
       this.width = double.infinity,
       this.borderRadius = 10,
       this.height = 42,
+        this.borderColor = ANColor.black,
       this.buttonColor = Colors.transparent,
       this.textColor = ANColor.textPrimary,
       this.iconColor = ANColor.textPrimary})
@@ -141,8 +143,9 @@ class DTOutlinedButton extends StatelessWidget {
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(borderRadius),
-            color: buttonColor,
-            border: Border.all(width: 1)),
+            color: Color(0xFFE9E9E9),
+            border: Border.all(width: 1, color: borderColor)
+        ),
         child: Material(
           color: Colors.transparent,
           child: InkWell(
@@ -169,7 +172,7 @@ class DTOutlinedButton extends StatelessWidget {
                         alignment: Alignment.center,
                         child: Text(
                           this.label ?? "Button",
-                          style: header4.copyWith(color: textColor),
+                          style: header5.copyWith(color: textColor, fontWeight: FontWeight.w600),
                         ),
                       ),
                     )

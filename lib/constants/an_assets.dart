@@ -6,4 +6,7 @@ class ANAssets{
     static const String walletIcon = 'assets/icons/wallet_icon.png';
     static const String placeHolderImage = 'assets/icons/placeholder_image.png';
     static const String faceIdIcon = 'assets/icons/face_id_icon.png';
+
+    static const String mainBackgroundImage = 'assets/icons/splash_background.png';
+    static const String appMainLogo = 'assets/icons/app_logo.png';
 }

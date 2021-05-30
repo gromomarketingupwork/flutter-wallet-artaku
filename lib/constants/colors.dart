@@ -20,4 +20,6 @@ class ANColor {
   static const Color bottomNavBg = Color(0xFFF5FAFE);
   static const Color notificationDot = Color(0xFFFFC32F);
   static const Color border = Color.fromRGBO(0, 0, 0, 0.1);
+  static const Color buttonPrimary = Color(0xFF23036A);
+  static const Color buttonTextColor = Color(0xFF6200EE);
 }
