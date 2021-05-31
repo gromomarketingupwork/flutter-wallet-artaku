@@ -26,6 +26,7 @@ class ANTextFormField extends StatelessWidget {
   final bool obscureText;
   final int maxLines;
   final double borderRadius;
+  final String labelText;
 
   const ANTextFormField({
     this.onChange,
@@ -34,6 +35,7 @@ class ANTextFormField extends StatelessWidget {
     this.fillColor,
     this.placeholder = "",
     this.hintText = "",
+    this.labelText = "",
     this.borderRadius = 12.0,
     this.readOnly = false,
     this.obscureText = false,
@@ -77,7 +79,7 @@ class ANTextFormField extends StatelessWidget {
                     readOnly: readOnly,
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.all(11),
-                      border: InputBorder.none,
+                      border: OutlineInputBorder(),
                       filled: true,
                       fillColor: ANColor.white,
                       hintText: hintText,
@@ -85,18 +87,19 @@ class ANTextFormField extends StatelessWidget {
                       suffixIcon: suffixIcon,
                       prefixText: prefixText,
                       counterText: "",
+                        labelText: labelText,
                       hintStyle:
                           TextStyle(color: Colors.black.withOpacity(0.6), fontStyle: FontStyle.italic, fontSize: 20),
                       labelStyle: TextStyle(height: 1),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
                         borderSide: BorderSide(
-                            width: 1, color: ANColor().textSecondary),
+                            width: 1, color: ANColor.black.withOpacity(0.12)),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
                         borderSide: BorderSide(
-                            width: 1, color: ANColor().textSecondary),
+                            width: 1, color: ANColorNew.primary.withOpacity(0.12)),
                       ),
                       // focusedBorder: InputBorder.none
                     ),

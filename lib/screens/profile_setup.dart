@@ -9,7 +9,6 @@ import 'package:etherwallet/constants/colors.dart';
 import 'package:etherwallet/constants/syles.dart';
 import 'package:etherwallet/context/wallet/wallet_provider.dart';
 import 'package:etherwallet/network/profile_network_services.dart';
-import 'package:etherwallet/network/wallet_network_service.dart';
 import 'package:etherwallet/service/configuration_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -33,193 +32,252 @@ class _WalletProfileSetupPageState extends State<WalletProfileSetupPage> {
 
   ProfileNetworkService profileNetworkService = new ProfileNetworkService();
   final RoundedLoadingButtonController _btnController =
-  RoundedLoadingButtonController();
+      RoundedLoadingButtonController();
+
   @override
   Widget build(BuildContext context) {
     var store = useWallet(context);
-    return Scaffold(
-      backgroundColor: ANColor.primary,
-      appBar: ANAppBar(appBar: AppBar()),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.05,
-            ),
-            Align(
-              alignment: Alignment.center,
+    return Stack(
+      children: [
+        Container(child: Image.asset(ANAssets.mainBackgroundImage)),
+        Scaffold(
+          backgroundColor: ANColor.white.withOpacity(0.8),
+          appBar: ANAppBarNew(
+            appBar: AppBar(),
+          ),
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 48),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
-                    "Create your profile",
-                    style: header1.copyWith(color: ANColor.backgroundText),
-                  ),
                   SizedBox(
-                    height: 48,
+                    height: MediaQuery.of(context).size.height * 0.05,
                   ),
-                  Center(
-                    child: Stack(
+                  Align(
+                    alignment: Alignment.center,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        Text(
+                          "CREATE ACCOUNT",
+                          style: header2.copyWith(fontWeight: FontWeight.w500),
+                        ),
+                        SizedBox(
+                          height: 48,
+                        ),
                         Center(
-                          child: CircleAvatar(
-                            radius: 75,
-                            backgroundColor: ANColor.white,
-                            child: selectedImage != null
-                                ? ClipRRect(
-                                    borderRadius: BorderRadius.circular(75),
-                                    child: Image.file(
-                                      selectedImage,
-                                      width: 150,
-                                      height: 150,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  )
-                                : Container(
-                                    decoration: BoxDecoration(
-                                      color: ANColor.primary,
+                          child: Stack(
+                            children: [
+                              Center(
+                                child: CircleAvatar(
+                                  radius: 75,
+                                  backgroundColor: ANColor.white,
+                                  child: selectedImage != null
+                                      ? ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(75),
+                                          child: Image.file(
+                                            selectedImage,
+                                            width: 150,
+                                            height: 150,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        )
+                                      : Container(
+                                          decoration: BoxDecoration(
+                                            color: ANColor.primary,
+                                            borderRadius:
+                                                BorderRadius.circular(75),
+                                          ),
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(75),
+                                            child: Image.asset(
+                                              ANAssets.profileImage,
+                                              width: 150,
+                                              height: 150,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                ),
+                              ),
+                              Align(
+                                child: Container(
+                                  height: 150,
+                                  width: 150,
+                                  decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(75),
-                                    ),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(75),
-                                      child: Image.asset(
-                                        ANAssets.profileImage,
-                                        width: 150,
-                                        height: 150,
-                                        fit: BoxFit.cover,
+                                      border: Border.all(color: ANColor.white),
+                                      color: Colors.transparent),
+                                  child: InkWell(
+                                    onTap: () {
+                                      _getImage();
+                                    },
+                                    child: Align(
+                                      alignment: Alignment(1, 1),
+                                      child: Container(
+                                        height: 54,
+                                        width: 54,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(27),
+                                            color: ANColorNew.primary),
+                                        child: Icon(FontAwesomeIcons.camera,
+                                            size: 16,
+                                            color: ANColor.white),
                                       ),
                                     ),
                                   ),
-                          ),
-                        ),
-                        Align(
-                          child: Container(
-                            height: 150,
-                            width: 150,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(75),
-                                border: Border.all(color: ANColor.white),
-                                color: Colors.transparent),
-                            child: InkWell(
-                              onTap: () {
-                                _getImage();
-                              },
-                              child: Align(
-                                alignment: Alignment(0.85, 0.85),
-                                child: Container(
-                                  height: 40,
-                                  width: 40,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      border: Border.all(color: ANColor.white),
-                                      color: ANColor.primary),
-                                  child: Icon(FontAwesomeIcons.camera,
-                                      color: ANColor.white),
                                 ),
                               ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 48,
-                  ),
-                  FormBuilder(
-                    key: formKey,
-                    child: Column(
-                      children: [
-                        ANTextFormField(
-                          attribute: 'username',
-                          hintText: "Username",
-                          width: 250,
-                          validator: FormBuilderValidators.compose(
-                            [
-                              FormBuilderValidators.required(context,
-                                  errorText: "username is required"),
+                              Align(
+                                child: Container(
+                                  height: 150,
+                                  width: 150,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(75),
+                                      border: Border.all(color: ANColor.white),
+                                      color: Colors.transparent),
+                                  child: InkWell(
+                                    onTap: () {
+                                      _getImage();
+                                    },
+                                    child: Align(
+                                      alignment: Alignment(-1, 1),
+                                      child: Container(
+                                        height: 54,
+                                        width: 54,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                            BorderRadius.circular(27),
+                                            color: ANColorNew.primaryPink),
+                                        child: Icon(FontAwesomeIcons.image,
+                                            size: 16,
+                                            color: ANColor.white),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
-                          initialValue: formData['username'],
-                          onChange: (v) {
-                            setState(() {
-                              formData = {...formData, 'username': v};
-                            });
-                          },
                         ),
                         SizedBox(
-                          height: 25,
+                          height: 48,
                         ),
-                        ANTextFormField(
-                          attribute: 'email',
-                          hintText: "Email",
-                          width: 250,
-                          validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.required(context,
-                                errorText: "Email is required"),
-                            // FormBuilderValidators.email(context, errorText: 'Email pattern not matched')
-                          ]),
-                          initialValue: formData['email'],
-                          onChange: (v) {
-                            setState(() {
-                              formData = {...formData, 'email': v};
-                            });
-                          },
+                        FormBuilder(
+                          key: formKey,
+                          child: Column(
+                            children: [
+                              ANTextFormField(
+                                attribute: 'username',
+                                labelText: "Username",
+                                width: 326,
+                                borderRadius: 4,
+                                validator: FormBuilderValidators.compose(
+                                  [
+                                    FormBuilderValidators.required(context,
+                                        errorText: "username is required"),
+                                  ],
+                                ),
+                                initialValue: formData['username'],
+                                onChange: (v) {
+                                  setState(() {
+                                    formData = {...formData, 'username': v};
+                                  });
+                                },
+                              ),
+                              SizedBox(
+                                height: 25,
+                              ),
+                              ANTextFormField(
+                                attribute: 'email',
+                                labelText: "Email",
+                                width: 326,
+                                borderRadius: 4,
+                                validator: FormBuilderValidators.compose([
+                                  FormBuilderValidators.required(context,
+                                      errorText: "Email is required"),
+                                  // FormBuilderValidators.email(context, errorText: 'Email pattern not matched')
+                                ]),
+                                initialValue: formData['email'],
+                                onChange: (v) {
+                                  setState(() {
+                                    formData = {...formData, 'email': v};
+                                  });
+                                },
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                            ],
+                          ),
                         ),
                         SizedBox(
-                          height: 20,
+                          height: MediaQuery.of(context).size.height * 0.05,
                         ),
+                        ANButton(
+                          label: 'CONTINUE',
+                          width: 172,
+                          height: 36,
+                          buttonColor: ANColor.buttonPrimary,
+                          borderRadius: 4,
+                          textColor: ANColor.white,
+                          onClick: () async {
+                            if (formKey.currentState.saveAndValidate()) {
+                              var configurationService =
+                                  Provider.of<ConfigurationService>(context,
+                                      listen: false);
+                              try {
+                                await profileNetworkService.createWalletProfile(
+                                    store.state.address.toString(),
+                                    formData['username'],
+                                    formData['email'],
+                                    selectedImage);
+                                configurationService
+                                    .setEmail(formData['email']);
+                                configurationService
+                                    .setUsername(formData['username']);
+                                Navigator.of(context).pushNamed('/pin-set');
+                              } catch (e) {
+                                _btnController.error();
+                                Future.delayed(Duration(milliseconds: 3000),
+                                    () {
+                                  _btnController.reset();
+                                });
+                                AppSnackbar.error(
+                                    context, "Cannot create profile");
+                              }
+                            }
+                          },
+                        ),
+                        // RoundedLoadingButton(
+                        //   child: Text(
+                        //     "Continue",
+                        //     style: header3.copyWith(color: ANColor.black),
+                        //   ),
+                        //   height: 50,
+                        //   width: 250,
+                        //   color: ANColor.white,
+                        //   borderRadius: 25,
+                        //   valueColor: ANColor.primary,
+                        //   successColor: ANColor.white,
+                        //   onPressed: () async {
+                        //
+                        //   },
+                        //   controller: _btnController,
+                        // )
                       ],
                     ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  RoundedLoadingButton(
-                    child: Text(
-                      "Continue",
-                      style: header3.copyWith(color: ANColor.black),
-                    ),
-                    height: 50,
-                    width: 250,
-                    color: ANColor.white,
-                    borderRadius: 25,
-                    valueColor: ANColor.primary,
-                    successColor: ANColor.white,
-
-                    onPressed: () async {
-                      if (formKey.currentState.saveAndValidate()) {
-                        var configurationService =
-                        Provider.of<ConfigurationService>(context,
-                            listen: false);
-                        try {
-                          await profileNetworkService.createWalletProfile(
-                              store.state.address.toString(),
-                              formData['username'],
-                              formData['email'],
-                              selectedImage);
-                          configurationService.setEmail(formData['email']);
-                          configurationService.setUsername(formData['username']);
-                          Navigator.of(context).pushNamed('/pin-set');
-                        } catch (e) {
-                          _btnController.error();
-                          Future.delayed(Duration(milliseconds: 3000), (){
-                            _btnController.reset();
-                          });
-                          AppSnackbar.error(context, "Cannot create profile");
-                        }
-                      }
-                    },
-                    controller: _btnController,
-
                   )
                 ],
               ),
-            )
-          ],
-        ),
-      ),
+            ),
+          ),
+        )
+      ],
     );
   }
 

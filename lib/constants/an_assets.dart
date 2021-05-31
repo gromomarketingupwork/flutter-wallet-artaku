@@ -9,4 +9,5 @@ class ANAssets{
 
     static const String mainBackgroundImage = 'assets/icons/splash_background.png';
     static const String appMainLogo = 'assets/icons/app_logo.png';
+    static const String appMainLogoWhite = 'assets/icons/app_logo_white_big.png';
 }

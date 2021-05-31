@@ -46,8 +46,8 @@ final header1 = TextStyle(
     fontFamily: GoogleFonts.poppins().fontFamily);
 
 final header2 = TextStyle(
-    fontSize: 20,
-    height: (30 / 20),
+    fontSize: 28,
+    height: (42 / 28),
     color: ANColor.textPrimary,
     fontWeight: FontWeight.w600,
     fontFamily: GoogleFonts.poppins().fontFamily);

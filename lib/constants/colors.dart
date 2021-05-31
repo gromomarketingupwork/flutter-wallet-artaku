@@ -23,3 +23,8 @@ class ANColor {
   static const Color buttonPrimary = Color(0xFF23036A);
   static const Color buttonTextColor = Color(0xFF6200EE);
 }
+
+class ANColorNew{
+  static const Color primary = Color(0xFF6200EE);
+  static const Color primaryPink = Color(0xFFBB86FC);
+}

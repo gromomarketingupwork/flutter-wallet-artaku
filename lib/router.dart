@@ -7,6 +7,7 @@ import 'package:etherwallet/screens/profile_setup.dart';
 import 'package:etherwallet/screens/restore_wallet_page.dart';
 import 'package:etherwallet/screens/send_nft_screen.dart';
 import 'package:etherwallet/screens/setup_restore.dart';
+import 'package:etherwallet/screens/terms_of_service_page.dart';
 import 'package:etherwallet/screens/wallet_page.dart';
 import 'package:etherwallet/screens/your_wallet_page.dart';
 import 'package:etherwallet/service/configuration_service.dart';
@@ -106,6 +107,7 @@ Map<String, WidgetBuilder> getRoutes(context) {
           title: "Scan QRCode",
           onScanned: ModalRoute.of(context).settings.arguments,
         ),
+    '/terms-of-service': (BuildContext context) => TermsOfServicePage(),
     '/qrcode_reader-new': (BuildContext context) => WalletTransferProvider(
       builder: (context, store){
         List<dynamic> argumentsList = ModalRoute.of(context).settings.arguments;

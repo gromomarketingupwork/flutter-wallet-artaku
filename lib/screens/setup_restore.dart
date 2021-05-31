@@ -1,7 +1,6 @@
 import 'package:etherwallet/components/button/an_button.dart';
 import 'package:etherwallet/constants/an_assets.dart';
 import 'package:etherwallet/constants/colors.dart';
-import 'package:etherwallet/constants/syles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -47,7 +46,7 @@ class WalletSetupRestorePage extends HookWidget {
                     borderRadius: 4,
                     textColor: ANColor.white,
                     onClick: (){
-                      Navigator.of(context).pushNamed('/your-wallet');
+                      Navigator.of(context).pushNamed('/terms-of-service');
                     },
                   ),
                   SizedBox(
