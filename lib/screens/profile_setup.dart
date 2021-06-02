@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:camera/camera.dart';
 import 'package:etherwallet/components/appbar/an_appbar.dart';
 import 'package:etherwallet/components/button/an_button.dart';
 import 'package:etherwallet/components/form/an_text_field.dart';
@@ -9,6 +10,7 @@ import 'package:etherwallet/constants/colors.dart';
 import 'package:etherwallet/constants/syles.dart';
 import 'package:etherwallet/context/wallet/wallet_provider.dart';
 import 'package:etherwallet/network/profile_network_services.dart';
+import 'package:etherwallet/screens/take_picture_screen.dart';
 import 'package:etherwallet/service/configuration_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -31,12 +33,10 @@ class _WalletProfileSetupPageState extends State<WalletProfileSetupPage> {
   File selectedImage;
 
   ProfileNetworkService profileNetworkService = new ProfileNetworkService();
-  final RoundedLoadingButtonController _btnController =
-      RoundedLoadingButtonController();
+
 
   @override
   Widget build(BuildContext context) {
-    var store = useWallet(context);
     return Container(
       color: ANColor.white,
       child: Stack(
@@ -127,6 +127,16 @@ class _WalletProfileSetupPageState extends State<WalletProfileSetupPage> {
                                   left: 60,
                                   bottom: 0,
                                   child: InkWell(
+                                    onTap: () async {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => CameraScreen(valueChanged: (value){
+                                            _cropImage(value);
+                                          },),
+                                        ),
+                                      );
+                                    },
                                     child: Container(
                                       height: 56,
                                       width: 56,
@@ -209,44 +219,23 @@ class _WalletProfileSetupPageState extends State<WalletProfileSetupPage> {
                                     Provider.of<ConfigurationService>(context,
                                         listen: false);
                                 try {
-                                  await profileNetworkService.createWalletProfile(
-                                      store.state.address.toString(),
-                                      formData['username'],
-                                      formData['email'],
-                                      selectedImage);
+                                  // await profileNetworkService.createWalletProfile(
+                                  //     store.state.address.toString(),
+                                  //     formData['username'],
+                                  //     formData['email'],
+                                  //     selectedImage);
                                   configurationService
                                       .setEmail(formData['email']);
                                   configurationService
                                       .setUsername(formData['username']);
                                   Navigator.of(context).pushNamed('/pin-set');
                                 } catch (e) {
-                                  _btnController.error();
-                                  Future.delayed(Duration(milliseconds: 3000),
-                                      () {
-                                    _btnController.reset();
-                                  });
                                   AppSnackbar.error(
                                       context, "Cannot create profile");
                                 }
                               }
                             },
                           ),
-                          // RoundedLoadingButton(
-                          //   child: Text(
-                          //     "Continue",
-                          //     style: header3.copyWith(color: ANColor.black),
-                          //   ),
-                          //   height: 50,
-                          //   width: 250,
-                          //   color: ANColor.white,
-                          //   borderRadius: 25,
-                          //   valueColor: ANColor.primary,
-                          //   successColor: ANColor.white,
-                          //   onPressed: () async {
-                          //
-                          //   },
-                          //   controller: _btnController,
-                          // )
                         ],
                       ),
                     )

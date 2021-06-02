@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:etherwallet/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -81,25 +79,32 @@ class ANTextFormField extends StatelessWidget {
                       contentPadding: EdgeInsets.all(11),
                       border: OutlineInputBorder(),
                       filled: true,
-                      fillColor: ANColor.white,
+                      fillColor: Colors.transparent,
                       hintText: hintText,
                       // suffixText: suffixText,
                       suffixIcon: suffixIcon,
                       prefixText: prefixText,
                       counterText: "",
-                        labelText: labelText,
-                      hintStyle:
-                          TextStyle(color: Colors.black.withOpacity(0.6), fontStyle: FontStyle.italic, fontSize: 20),
-                      labelStyle: TextStyle(height: 1),
+                      labelText: labelText,
+                      hintStyle: TextStyle(
+                          color: Colors.black.withOpacity(0.6),
+                          fontStyle: FontStyle.italic,
+                          fontSize: 20),
+                      labelStyle: TextStyle(
+                        height: 1,
+                        color: ANColorNew.primary,
+                      ),
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
+                        borderRadius:
+                            BorderRadius.all(Radius.circular(borderRadius)),
                         borderSide: BorderSide(
                             width: 1, color: ANColor.black.withOpacity(0.12)),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
-                        borderSide: BorderSide(
-                            width: 1, color: ANColorNew.primary.withOpacity(0.12)),
+                        borderRadius:
+                            BorderRadius.all(Radius.circular(borderRadius)),
+                        borderSide:
+                            BorderSide(width: 1, color: ANColorNew.primary),
                       ),
                       // focusedBorder: InputBorder.none
                     ),
@@ -183,8 +188,8 @@ class ANTextField extends FormField<dynamic> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(4)),
-                        borderSide: BorderSide(
-                            width: 1, color: ANColor().textSecondary),
+                        borderSide:
+                            BorderSide(width: 2, color: ANColorNew.primary),
                       ),
                       // focusedBorder: InputBorder.none
                     ),

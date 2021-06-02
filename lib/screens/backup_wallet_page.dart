@@ -1,8 +1,11 @@
+import 'dart:ui';
+
 import 'package:etherwallet/components/appbar/an_appbar.dart';
 import 'package:etherwallet/components/button/an_button.dart';
+import 'package:etherwallet/components/warning_popup.dart';
+import 'package:etherwallet/constants/an_assets.dart';
 import 'package:etherwallet/constants/colors.dart';
 import 'package:etherwallet/constants/syles.dart';
-import 'package:etherwallet/context/setup/wallet_setup_provider.dart';
 import 'package:etherwallet/service/configuration_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,73 +17,171 @@ class BackupWalletPage extends StatefulWidget {
 
 class _BackupWalletPageState extends State<BackupWalletPage> {
   @override
+  initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return WarningPopup();
+          });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     dynamic args = ModalRoute.of(context).settings.arguments;
-    var store = useWalletSetup(context);
-    return Scaffold(
-      backgroundColor: ANColor.primary,
-      appBar: ANAppBar(
-        appBar: AppBar(),
-      ),
-      body: Align(
-        alignment: Alignment.center,
-        child: Column(
-          children: [
-            SizedBox(
-              height: 32,
-            ),
-            Text(
-              "Backup Wallet",
-              style: header1.copyWith(color: ANColor.backgroundText),
-            ),
-            SizedBox(
-              height: 32,
-            ),
-            Container(
-              padding: EdgeInsets.all(10),
-              height: 200,
-              width: 200,
-              decoration: BoxDecoration(
-                  color: ANColor.white,
-                  borderRadius: BorderRadius.all(Radius.circular(10))),
-              child: Text(
-                args['mnemonic'] != null ? args['mnemonic'] : "",
-                style: header2.copyWith(fontStyle: FontStyle.italic),
+    String mnemonics = args['mnemonic'] ?? "";
+    List<String> mnemonicList = mnemonics.split(' ').map((e) => e).toList();
+    return Container(
+      color: ANColor.white,
+      child: Stack(
+        children: [
+          Container(
+            child: Image.asset(ANAssets.backupWalletBackground),
+          ),
+          Scaffold(
+              backgroundColor: ANColor.white.withOpacity(0.2),
+              appBar: ANAppBarNew(
+                appBar: AppBar(),
               ),
-            ),
-            Expanded(
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 40),
-                child: Text(
-                  "Write down or print the phrase above. Without this restore phrase any purchase and funds cannot be replaced.",
-                  textAlign: TextAlign.center,
-                  style: header2.copyWith(
-                      color: ANColor.backgroundText,
-                      fontWeight: FontWeight.w400),
+              body: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 48),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.05,
+                    ),
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Column(
+                          children: [
+                            Text(
+                              "ACCOUNT BACKUP",
+                              style:
+                                  header2.copyWith(fontWeight: FontWeight.w500),
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.05,
+                            ),
+                            Text(
+                              "Write down or print the passphrase below and keep it in a safe place to restore your purchases in the future.",
+                              style: header4.copyWith(
+                                fontWeight: FontWeight.w400,
+                                color: ANColor.black.withOpacity(0.6),
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(
+                              height: 48,
+                            ),
+                            Theme(
+                              data: Theme.of(context)
+                                  .copyWith(dividerColor: Colors.transparent),
+                              child: FittedBox(
+                                child: DataTable(
+                                  headingRowHeight: 0,
+                                  columnSpacing: 20,
+                                  dataRowHeight: 30,
+                                  dividerThickness: 0,
+                                  columns: [
+                                    DataColumn(label: Text('')),
+                                    DataColumn(label: Text('')),
+                                    DataColumn(label: Text('')),
+                                  ],
+                                  rows: mnemonicList.isNotEmpty
+                                      ? getDataRow(mnemonicList)
+                                      : [],
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 32,
+                            ),
+                            ANOutlinedButton(
+                              height: 36,
+                              width: 104,
+                              textColor: ANColor.buttonTextColor,
+                              buttonColor: Colors.transparent,
+                              onClick: () {},
+                              borderRadius: 4,
+                              borderColor: ANColor.black.withOpacity(0.2),
+                              label: "PRINT",
+                            ),
+                            Expanded(
+                                child: SizedBox(
+                              height: 20,
+                            )),
+                            ANButton(
+                              label: 'CONTINUE',
+                              width: 122,
+                              height: 36,
+                              buttonColor: ANColor.buttonPrimary,
+                              borderRadius: 4,
+                              textColor: ANColor.white,
+                              onClick: () {
+                                var configurationService =
+                                    Provider.of<ConfigurationService>(context,
+                                        listen: false);
+                                if (configurationService.getEmail() == null ||
+                                    configurationService.getEmail().isEmpty) {
+                                  Navigator.of(context)
+                                      .pushNamed('/profile-setup');
+                                }
+                              },
+                            ),
+                            SizedBox(
+                              height: 64,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ),
-            ANButton(
-              height: 50,
-              width: 250,
-              label: "Continue",
-              buttonColor: ANColor.white,
-              borderRadius: 25,
-              onClick: () {
-                var configurationService =
-                    Provider.of<ConfigurationService>(context, listen: false);
-                if (configurationService.getEmail() == null ||
-                    configurationService.getEmail().isEmpty) {
-                  Navigator.of(context).pushNamed('/profile-setup');
-                }
-              },
-            ),
-            SizedBox(
-              height: 20,
-            )
-          ],
-        ),
+              ))
+        ],
       ),
     );
+  }
+
+  getDataRow(List<String> mnemonicList) {
+    var dataRows = <DataRow>[
+      DataRow(
+          cells: mnemonicList
+              .sublist(0, 3)
+              .map((e) => DataCell(Text(
+                    e,
+                    style: header4Mnemonic,
+                  )))
+              .toList()),
+      DataRow(
+          cells: mnemonicList
+              .sublist(3, 6)
+              .map((e) => DataCell(Text(
+                    e,
+                    style: header4Mnemonic,
+                  )))
+              .toList()),
+      DataRow(
+          cells: mnemonicList
+              .sublist(6, 9)
+              .map((e) => DataCell(Text(
+                    e,
+                    style: header4Mnemonic,
+                  )))
+              .toList()),
+      DataRow(
+          cells: mnemonicList
+              .sublist(9, 12)
+              .map((e) => DataCell(Text(
+            e,
+            style: header4Mnemonic,
+          )))
+              .toList()),
+    ];
+    return dataRows;
   }
 }

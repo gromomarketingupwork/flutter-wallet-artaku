@@ -8,64 +8,72 @@ final mainHeaderTitle = TextStyle(
     height: (36 / 24),
     color: ANColor.white,
     fontWeight: FontWeight.w600,
-    fontFamily: GoogleFonts.poppins().fontFamily);
+    fontFamily: GoogleFonts.roboto().fontFamily);
 
 final generalPageHeaderTitle = TextStyle(
     fontSize: 18,
     height: (27 / 18),
     color: ANColor.white,
     fontWeight: FontWeight.w600,
-    fontFamily: GoogleFonts.poppins().fontFamily);
+    fontFamily: GoogleFonts.roboto().fontFamily);
 
 final homeNumberStyle = TextStyle(
     fontSize: 28,
     height: (42 / 28),
     color: ANColor.textPrimary,
     fontWeight: FontWeight.w600,
-    fontFamily: GoogleFonts.poppins().fontFamily);
+    fontFamily: GoogleFonts.roboto().fontFamily);
 
 final headerTitle = TextStyle(
     fontSize: 18,
     height: (27 / 18),
     color: ANColor.white,
     fontWeight: FontWeight.w600,
-    fontFamily: GoogleFonts.poppins().fontFamily);
+    fontFamily: GoogleFonts.roboto().fontFamily);
 
 final tabHeader = TextStyle(
     fontSize: 20,
     height: (30 / 20),
     color: ANColor.textPrimary,
     fontWeight: FontWeight.w600,
-    fontFamily: GoogleFonts.poppins().fontFamily);
+    fontFamily: GoogleFonts.roboto().fontFamily);
 
 final header1 = TextStyle(
     fontSize: 32,
     height: (48 / 32),
     color: ANColor.textPrimary,
     fontWeight: FontWeight.bold,
-    fontFamily: GoogleFonts.poppins().fontFamily);
+    fontFamily: GoogleFonts.roboto().fontFamily);
 
 final header2 = TextStyle(
     fontSize: 28,
     height: (42 / 28),
     color: ANColor.textPrimary,
     fontWeight: FontWeight.w600,
-    fontFamily: GoogleFonts.poppins().fontFamily);
+    fontFamily: GoogleFonts.roboto().fontFamily);
 
 final header3 = TextStyle(
     fontSize: 18,
     height: (27 / 18),
     color: ANColor.textPrimary,
     fontWeight: FontWeight.w600,
-    fontFamily: GoogleFonts.poppins().fontFamily);
+    fontFamily: GoogleFonts.roboto().fontFamily);
 
 final header4 = TextStyle(
     fontSize: 16,
     height: (24 / 16),
     color: ANColor.textPrimary,
     fontWeight: FontWeight.w600,
-    fontFamily: GoogleFonts.poppins().fontFamily);
+    fontFamily: GoogleFonts.roboto().fontFamily);
 final header4sec = header4.copyWith(color: ANColor.white);
+
+
+final header4Mnemonic = TextStyle(
+    fontSize: 16,
+    height: (24 / 16),
+    color: ANColor.textPrimary,
+    fontWeight: FontWeight.bold,
+    fontFamily: GoogleFonts.robotoMono().fontFamily);
 
 final header5 = TextStyle(
     fontSize: 14,

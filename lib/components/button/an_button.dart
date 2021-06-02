@@ -143,7 +143,7 @@ class ANOutlinedButton extends StatelessWidget {
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(borderRadius),
-            color: Color(0xFFE9E9E9),
+            color: buttonColor,
             border: Border.all(width: 1, color: borderColor)
         ),
         child: Material(

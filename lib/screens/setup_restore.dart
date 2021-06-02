@@ -59,7 +59,7 @@ class WalletSetupRestorePage extends HookWidget {
                     height: 36,
                     width: 172,
                     textColor: ANColor.buttonTextColor,
-                    buttonColor: ANColor.white,
+                    buttonColor: Colors.transparent,
                     onClick: () {
                       Navigator.of(context).pushNamed('/restore-wallet');
                     },

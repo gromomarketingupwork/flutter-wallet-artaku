@@ -27,4 +27,5 @@ class ANColor {
 class ANColorNew{
   static const Color primary = Color(0xFF6200EE);
   static const Color primaryPink = Color(0xFFBB86FC);
+  static const Color warning = Color(0xFFB00020);
 }
