@@ -1,10 +1,15 @@
 import 'package:etherwallet/components/appbar/an_appbar.dart';
+import 'package:etherwallet/components/form/an_text_field.dart';
+import 'package:etherwallet/constants/an_assets.dart';
 import 'package:etherwallet/constants/colors.dart';
 import 'package:etherwallet/constants/syles.dart';
+import 'package:etherwallet/main.dart';
 import 'package:etherwallet/service/configuration_service.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
@@ -98,170 +103,187 @@ class _PinEnterPageState extends State<PinEnterPage> {
 
   final controller = PinEnterController();
 
+  void togglePassword() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
+
+  bool _obscureText = true;
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: ANColor.primary,
-        appBar: ANAppBar(appBar: AppBar()),
-        body: Obx(() {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Container(
-                  padding: EdgeInsets.only(top: 40, right: 10, left: 10),
-                  color: ANColor.primary,
-                  width: double.infinity,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Please enter $MAX_PIN_SIZE digits transaction pin to proceed",
-                        style: header4sec.copyWith(fontWeight: FontWeight.w400),
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Stack(
-                        overflow: Overflow.visible,
+    return Container(
+      color: ANColor.white,
+      child: Stack(
+        children: [
+          Container(
+            child: Image.asset(ANAssets.pinEnterPageBackground),
+          ),
+          Scaffold(
+            backgroundColor: ANColor.white.withOpacity(0.2),
+            appBar: ANAppBarNew(
+              appBar: AppBar(),
+            ),
+            body: Container(
+              child: Obx(() {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.05,
+                          ),
+                          Align(
+                            alignment: Alignment.center,
+                            child: Column(
                               children: [
-                                SizedBox(
-                                  width: 40,
-                                ),
-                                Wrap(
-                                  // alignment: WrapAlignment.center,
-                                  spacing: 10,
-                                  children:
-                                      List.generate(MAX_PIN_SIZE, (index) {
-                                    var value = controller.pinValue;
-                                    value = value.padRight(MAX_PIN_SIZE, ' ');
-                                    if (controller.isHidden &&
-                                        controller.pinValue.length > 0) {
-                                      value = "*"
-                                          .padRight(
-                                              controller.pinValue.length, "*")
-                                          .padRight(MAX_PIN_SIZE, ' ');
-                                    }
-                                    return Container(
-                                      width: 30,
-                                      height: 30,
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                          color: ANColor.white),
-                                      child: "*" == value[index]
-                                          ? Container(
-                                              height: 10,
-                                              width: 10,
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(5),
-                                                  color: ANColor.black),
-                                            )
-                                          : Text(
-                                              value[index] ?? "",
-                                              style: header3,
-                                            ),
-                                    );
-                                  }),
+                                Text(
+                                  "ENTER PIN",
+                                  style: header2.copyWith(
+                                      fontWeight: FontWeight.w500),
                                 ),
                                 SizedBox(
-                                  width: 40,
-                                )
-                              ]),
-                          if (controller.pinValue.length > 0)
-                            Positioned(
-                                left: ((MAX_PIN_SIZE + 1) * 40).toDouble(),
-                                top: 0,
-                                child: InkWell(
-                                  // behavior: HitTestBehavior.translucent,
-                                  onTap: () {
-                                    controller.toggleHidden();
-                                  },
-                                  child: Container(
-                                    width: 30,
-                                    height: 30,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(15),
-                                        color: ANColor.white),
-                                    child: Icon(
-                                      FontAwesomeIcons.eye,
-                                      color: ANColor().textTertiary,
-                                      size: 18,
-                                    ),
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.05,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 104),
+                                  child: Text(
+                                    "Enter your Artaku PIN below to continue.",
+                                    style: header4.copyWith(
+                                        fontWeight: FontWeight.w400),
+                                    textAlign: TextAlign.center,
                                   ),
-                                )),
-                        ],
-                      ),
-                      Expanded(
-                        child: Column(
-                          children: [
-                            GridView.count(
-                              crossAxisCount: 3,
-                              crossAxisSpacing:
-                                  MediaQuery.of(context).size.width * 0.2,
-                              mainAxisSpacing:
-                                  MediaQuery.of(context).size.width * 0.1,
-                              shrinkWrap: true,
-                              children: [
-                                ...actionList.map(
-                                  (e) {
-                                    return Container(
-                                      alignment: Alignment.center,
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          controller.performAction(e, context);
-                                        },
-                                        child: Container(
-                                          height: 60,
-                                          width: 60,
-                                          decoration: BoxDecoration(
-                                              color: ANColor.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(30)),
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            e,
-                                            style: header3,
-                                          ),
-                                        ),
+                                ),
+                                SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.05,
+                                ),
+                                FormBuilder(
+                                  child: ANTextFormField(
+                                    keyboardType: TextInputType.numberWithOptions(
+                                        signed: false, decimal: false),
+                                    attribute: 'pin',
+                                    labelText: "PIN",
+                                    hintText: "1234",
+                                    borderRadius: 4,
+                                    validator: FormBuilderValidators.compose(
+                                      [
+                                        FormBuilderValidators.required(context,
+                                            errorText: "pin is required"),
+                                      ],
+                                    ),
+                                    initialValue: controller.pinValue,
+                                    onChange: (v) {},
+                                    readOnly: true,
+                                    obscureText: _obscureText,
+                                    suffixIcon: Container(
+                                      child: InkWell(
+                                          onTap: () {
+                                            togglePassword();
+                                          },
+                                          child: Icon(
+                                            _obscureText
+                                                ? FontAwesomeIcons.eye
+                                                : FontAwesomeIcons.eyeSlash,
+                                            size: 20,
+                                            color: ANColor.textPrimary,
+                                          )),
+                                    ),
+                                    width: 326,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 12,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 48),
+                                  child: InkWell(
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                      Icon(
+                                        FontAwesomeIcons.fingerprint,
+                                        color: ANColor.black.withOpacity(0.6),
+                                        size: 24,
                                       ),
-                                    );
-                                  },
-                                )
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        "Login with biometrics",
+                                        style: header4.copyWith(
+                                            fontWeight: FontWeight.w500,
+                                            color: ANColor.black.withOpacity(0.6)),
+                                      )
+                                    ]),
+                                    onTap: () async {
+                                      if (await _isBiometricAvailable()) {
+                                        await _getListOfBiometricTypes();
+                                        // await _authenticateUser();
+                                      }
+                                    },
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: MediaQuery.of(context).size.height*0.265,
+                                ),
+                                GridView.count(
+                                  crossAxisCount: 3,
+                                  childAspectRatio: (MediaQuery.of(context).size.width/3)/60,
+                                  crossAxisSpacing: 0,
+                                  shrinkWrap: true,
+                                  mainAxisSpacing: 0,
+                                  children: [
+                                    ...actionList.map(
+                                          (e) {
+                                        return Container(
+                                          alignment: Alignment.center,
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              controller.performAction(
+                                                  e, context);
+                                            },
+                                            child: Container(
+                                              height: 60,
+                                              width: MediaQuery.of(context).size.width/3,
+                                              decoration: BoxDecoration(
+                                                color: ANColor.white,
+                                                border: Border.all(
+                                                  color: ANColor.black.withOpacity(0.1),
+                                                  width: 0.5
+                                                )
+
+                                              ),
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                e,
+                                                style: header2.copyWith(fontWeight: FontWeight.w500),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    )
+                                  ],
+                                ),
                               ],
                             ),
-                            InkWell(
-                              child: Icon(
-                                FontAwesomeIcons.fingerprint,
-                                color: ANColor.white,
-                                size: 50,
-                              ),
-                              onTap: () async {
-                                if (await _isBiometricAvailable()) {
-                                  await _getListOfBiometricTypes();
-                                  await _authenticateUser();
-                                }
-                              },
-                            ),
-                          ],
-                        ),
+                          )
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          );
-        }),
+                    ),
+                  ],
+                );
+              }),
+            ),
+          )
+        ],
       ),
     );
   }

@@ -13,4 +13,5 @@ class ANAssets{
     static const String createAccountBackground = 'assets/icons/create_account_background.png';
     static const String backupWalletBackground = 'assets/icons/account_backup_background.png';
     static const String pinSetPageBackground = 'assets/icons/pin_set_page_background.png';
+    static const String pinEnterPageBackground = 'assets/icons/pin_enter_page_background.png';
 }

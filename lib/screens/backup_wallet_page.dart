@@ -60,8 +60,7 @@ class _BackupWalletPageState extends State<BackupWalletPage> {
                           children: [
                             Text(
                               "ACCOUNT BACKUP",
-                              style:
-                                  header2.copyWith(fontWeight: FontWeight.w500),
+                              style: header2.copyWith(fontWeight: FontWeight.w500),
                             ),
                             SizedBox(
                               height: MediaQuery.of(context).size.height * 0.05,
